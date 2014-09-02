@@ -1,6 +1,8 @@
 chanarchive
 ===========
 
+[![NPM](https://nodei.co/npm/chanarchive.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/chanarchive/)
+
 Archiver for chans in NodeJS
 
 Based on the idea of [4chan](https://github.com/ypocat/4chan) by [ypocat](https://github.com/ypocat), and my original [Gist](https://gist.github.com/j3lte/5326383). It archives a thread on a chan.
