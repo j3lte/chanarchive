@@ -1,0 +1,13 @@
+.git*
+docs/
+examples/
+support/
+tests/
+out/
+chanarchive/
+test.js
+testing.js
+.travis.yml
+.DS_Store
+coverage.html
+lib-cov
