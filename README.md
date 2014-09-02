@@ -21,8 +21,8 @@ It will create a folder called `chanarchive` where it stores the current thread.
 
 ## Supported Chans:
 
-  * 4CHAN   ::  http://boards.4chan.org/<BOARD>/thread/<THREAD>
-  * 420CHAN ::  http://boards.420chan.org/<BOARD>/res/<THREAD>.php
+  * 4CHAN   ::  `http://boards.4chan.org/<BOARD>/thread/<THREAD>`
+  * 420CHAN ::  `http://boards.420chan.org/<BOARD>/res/<THREAD>.php`
 
 ## Todo
 
