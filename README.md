@@ -17,7 +17,7 @@ Then proceed as follows:
 
 Call the program with the `--help` option to see more options
 
-It will create a folder called `chanarchive` where it stores the current thread.
+It will create a folder called based on the chan, where it stores the current thread.
 
 ## Supported Chans:
 

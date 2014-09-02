@@ -12,7 +12,7 @@ var fs = require('fs'),
     optimist = require('optimist'),
     mkdirp = require('mkdirp'),
     lodash = require('lodash'),
-    saveFolder = './chanarchive/',
+    saveFolder = './',
     chan4RegExp = /^http:\/\/boards\.4chan\.org\/(\w)+\/thread\/(\d)+/,                 // 4chan
     chan420RegExp = /^http:\/\/boards\.420chan\.org\/(\w){1,}\/res\/(\d){1,}\.php.*/,   // 420chan
     argv, url, chanArchiver;

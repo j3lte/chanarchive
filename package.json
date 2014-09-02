@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Archiver for chans in NodeJS",
   "main": "chanarchive.js",
   "bin": {
