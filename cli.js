@@ -26,7 +26,7 @@ argv = optimist
             '',
             'Run in the directory where you want the archive to be downloaded.',
             '',
-            'Usage: $0 [OPTIONS] <URL>',
+            'Usage: chanarchive [OPTIONS] <URL>',
             '',
             'Current supported urls are',
             '',
@@ -37,10 +37,10 @@ argv = optimist
     .alias('o', 'original-filenames')
         .describe('o', 'write original filenames instead of the timestamp filenames')
     .alias('w', 'watch')
-        .describe('w', 'Watch for new files.')
+        .describe('w', 'watch for new files.')
         .boolean('w')
     .alias('i', 'interval')
-        .describe('i', 'Watching interval in seconds.')
+        .describe('i', 'watching interval in seconds.')
         .default('i', 10)
     .alias('v', 'version')
     .alias('t', 'threads')
