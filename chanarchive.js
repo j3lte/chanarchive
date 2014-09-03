@@ -165,7 +165,7 @@ ChanArchiver.prototype.handleNext = function () {
     }
 
     var handleFile = this.queue.shift(),
-        dest = _this.saveFolder + _this.board + '/' + _this.thread + '/' + file.fileName;
+        dest = _this.saveFolder + _this.board + '/' + _this.thread + '/' + handleFile.fileName;
 
     _this.a++;
 
