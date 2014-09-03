@@ -231,7 +231,7 @@ ChanArchiver.prototype.handleNext = function () {
 ChanArchiver.prototype.stop = function () {
     this.queue.length = 0;
     this.abort = true;
-    this.watch(false);
+    this._watchTimeOut = null;
     if (this.downloadTimeoutID) {
         clearTimeout(this.downloadTimeoutID);
         this.emit('end');
