@@ -5,7 +5,7 @@ chanarchive
 
 Archiver for chans in NodeJS
 
-Based on the idea of [4chan](https://github.com/ypocat/4chan) by [ypocat](https://github.com/ypocat), and my original [Gist](https://gist.github.com/j3lte/5326383). It archives a thread on a chan.
+Based on the idea of [4chan](https://github.com/ypocat/4chan) by [ypocat](https://github.com/ypocat), and my original [Gist](https://gist.github.com/j3lte/5326383). It archives a thread on a chan. Partly based on [4chan-downloader](https://www.npmjs.org/package/4chan-downloader).
 
 ## Usage
 
@@ -28,7 +28,6 @@ It will create a folder called based on the chan, where it stores the current th
 
 ## Todo
 
-  * Watch a thread
   * Download multiple boards
 
 ## License
