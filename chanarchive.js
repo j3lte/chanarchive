@@ -24,13 +24,25 @@ function ChanArchiver (type, url) {
     }
     Emitter.call(this);
 
+    var b = 5, t = 7;
+
     if (type === '4chan') {
 
         this.baseUrl = 'http://a.4cdn.org/';
         this.del = '/thread/';
         this.picUrl = 'http://images.4chan.org/';
 
-        this.bodyHandler = this.handleChan4Posts;
+        this.bodyHandler = this.handleChanPosts;
+
+    } else if (type === '8chan') {
+
+        this.baseUrl = 'https://8chan.co/';
+        this.del = '/res/';
+        this.picUrl = 'https://8chan.co/';
+
+        b = 4, t = 6;
+
+        this.bodyHandler = this.handleChanPosts;
 
     } else if (type === '420chan') {
 
@@ -57,8 +69,8 @@ function ChanArchiver (type, url) {
     this._concurrentThreads = 1;
     this._watchTimeOut = null;
 
-    this.board = url.split(/\/|\?|&|=|\./g)[5];
-    this.thread = url.split(/\/|\?|&|=|\./g)[7];
+    this.board = url.split(/\/|\?|&|=|\./g)[b];
+    this.thread = url.split(/\/|\?|&|=|\./g)[t];
 }
 
 util.inherits(ChanArchiver, Emitter);
@@ -110,7 +122,7 @@ ChanArchiver.prototype.parsePage = function (error, response, body) {
     }
 };
 
-ChanArchiver.prototype.handleChan4Posts = function (body) {
+ChanArchiver.prototype.handleChanPosts = function (body) {
     var _this = this;
     _.forEach(body.posts, function(post){
         if (post.filename) {
@@ -175,7 +187,7 @@ ChanArchiver.prototype.handleNext = function () {
 
         handleFile.existed = exists;
         if (exists) {
-            return finish();
+            return f();
         }
 
         request(handleFile.url)

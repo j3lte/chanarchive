@@ -1,6 +1,7 @@
 var optimist = require('optimist'),
     chalk = require('chalk'),
     chan4RegExp = /^http:\/\/boards\.4chan\.org\/(\w)+\/thread\/(\d)+/,                 // 4chan
+    chan8RegExp = /^https:\/\/8chan\.co\/(\w)+\/res\/(\d+)\.html.*/,                    // 8chan
     chan420RegExp = /^http:\/\/boards\.420chan\.org\/(\w){1,}\/res\/(\d){1,}\.php.*/,   // 420chan
     argv, url,
     ChanArchiver = require('./chanarchive');
@@ -31,6 +32,7 @@ argv = optimist
             'Current supported urls are',
             '',
             '4CHAN   :: http://boards.4chan.org/' + chalk.cyan('<BOARD>') + '/thread/' + chalk.cyan('<THREAD>'),
+            '8CHAN   :: https://8chan.co/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
             '420CHAN :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php'
         ].join('\n'))
     .boolean('o')
@@ -56,13 +58,15 @@ if (argv.version) {
     process.exit(0);
 }
 
-if (argv._.length !== 1 || url.indexOf('http://') !== 0) {
+if (argv._.length !== 1 || url.indexOf('http') !== 0) {
     console.log(optimist.help());
     process.exit();
 }
 
 if (chan4RegExp.test(url)) {
     chanArchiver = new ChanArchiver('4chan', url);
+} else if (chan8RegExp.test(url)) {
+    chanArchiver = new ChanArchiver('8chan', url);
 } else if (chan420RegExp.test(url)) {
     chanArchiver = new ChanArchiver('420chan', url);
 } else {
