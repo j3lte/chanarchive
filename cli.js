@@ -1,10 +1,8 @@
 var optimist = require('optimist'),
     chalk = require('chalk'),
-    chan4RegExp = /^http:\/\/boards\.4chan\.org\/(\w)+\/thread\/(\d)+/,                 // 4chan
-    chan8RegExp = /^https:\/\/8chan\.co\/(\w)+\/res\/(\d+)\.html.*/,                    // 8chan
-    chan420RegExp = /^http:\/\/boards\.420chan\.org\/(\w){1,}\/res\/(\d){1,}\.php.*/,   // 420chan
     argv, url,
-    ChanArchiver = require('./chanarchive');
+    ChanArchiver = require('./lib/chanarchive'),
+    ChanTypes = require('./lib/chantypes');
 
 var banner = [
 '',
@@ -63,17 +61,15 @@ if (argv._.length !== 1 || url.indexOf('http') !== 0) {
     process.exit();
 }
 
-if (chan4RegExp.test(url)) {
-    chanArchiver = new ChanArchiver('4chan', url);
-} else if (chan8RegExp.test(url)) {
-    chanArchiver = new ChanArchiver('8chan', url);
-} else if (chan420RegExp.test(url)) {
-    chanArchiver = new ChanArchiver('420chan', url);
-} else {
-    console.log(optimist.help());
-    console.log(chalk.red('\n\nUnsupported url'));
-    process.exit();
-}
+ChanTypes.get(url, function (type) {
+    if (type) {
+        chanArchiver = new ChanArchiver(type, url);
+    } else {
+        console.log(optimist.help());
+        console.log(chalk.red('\n\nUnsupported url'));
+        process.exit();
+    }
+});
 
 process.on('SIGINT', function() {
     chanArchiver.stop();
