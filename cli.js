@@ -1,6 +1,6 @@
 var optimist = require('optimist'),
     chalk = require('chalk'),
-    argv, url,
+    argv, url, chanArchiver,
     ChanArchiver = require('./lib/chanarchive'),
     ChanTypes = require('./lib/chantypes');
 
@@ -58,7 +58,7 @@ if (argv.version) {
 
 if (argv._.length !== 1 || url.indexOf('http') !== 0) {
     console.log(optimist.help());
-    process.exit();
+    process.exit(0);
 }
 
 ChanTypes.get(url, function (type) {
