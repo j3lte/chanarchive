@@ -1,60 +1,26 @@
+'use strict';
+/**
+ * 7CHAN Proxy, will be more general in the future. For now, while developing, use the following to
+ * test this proxy:
+ *
+ * Install nodemon:
+ * > npm install -g nodemon
+ *
+ * Uncomment last two lines
+ *
+ * Start proxy using nodemon
+ * > nodemon ./chanproxy.js
+ */
 
 var express = require('express'),
     request = require('request'),
+    version = require('../package').version,
+    headers = {
+        'User-Agent':'Chanarchive/' + version
+    },
     cheerio = require('cheerio'),
-    path = require('path'),
-    app = express();
-
-function fileName (url) {
-
-}
-
-function handle7ChanPost (postElement, $) {
-    var post = {};
-
-    post.no = $(postElement.find('.reflink a').get(1)).html() || '';
-    post.now = postElement.find('.post_header').first().contents().filter(function() {
-            return this.type === 'text';
-        }).text().replace(/\n/g,'') || '';
-    post.name = $(postElement.find('.postername')).text();
-
-    var msg = $(postElement.find('.message'));
-
-    post.com = msg ? msg.html().trim() : '';
-
-    var fileSizeElement = $(postElement).find('.file_size');
-    // Check if image is there
-    if (fileSizeElement.length) {
-
-        var url = fileSizeElement.find('a').first().attr('href');
-
-        post.fileUrl = url;
-        post.ext = path.extname(url);
-        post.tim = path.basename(url, path.extname(url));
-
-        // Check if filename is present
-        var fileSizeText = fileSizeElement.text().trim().replace(/\n/g,' '),
-            fileRegEx = new RegExp('(^.* - \()(.*) , (.*) , (.*)( \))', 'gi'),
-            filename = fileRegEx.exec(fileSizeText);
-
-        post.filename = filename && filename.length > 5 ? filename[5] : '';
-    }
-    // Check if multi images
-    var multiThumbs = $(postElement).find('span.multithumb,span.multithumbfirst');
-    if (multiThumbs.length) {
-        post.multi = [];
-        multiThumbs.each(function (i, el) {
-            var url = $(el).find('a').first().attr('href'),
-                file = {};
-
-            file.fileUrl = url;
-            file.ext = path.extname(url);
-            file.tim = path.basename(url, path.extname(url));
-            post.multi.push({ file : file });
-        });
-    }
-    return post;
-}
+    app = express(),
+    proxyType;
 
 app
     .get('/', function (req, res) {
@@ -64,16 +30,21 @@ app
                     posts : []
                 };
 
-            console.log('ChanProxy url request :' + url);
+            //console.log('ChanProxy url request : ' + url);
 
-            request(url, function(error, response, html){
+            var options = {
+                url: url,
+                method: 'GET',
+                headers: headers
+            };
+
+            request(options, function(error, response, html){
 
                 if (!error) {
 
                     var $ = cheerio.load(html);
-                    // First post:
-                    $('.post').each(function (i, el) {
-                        var post = handle7ChanPost($(el), $);
+                    $(proxyType.postClass).each(function (i, el) {
+                        var post = proxyType.postHandler($(el), $);
                         returnObj.posts.push(post);
                     });
 
@@ -84,27 +55,31 @@ app
             });
 
         } else {
-            res.send('EMPTY');
+            res.send({});
         }
     });
 
-function ChanProxy () {
+function ChanProxy (type) {
+    proxyType = require('./proxies/' + type);
     this.app = app;
+    this.port = 8088;
+    this.server = undefined;
 }
 
-ChanProxy.prototype.start = function () {
-    this.app.listen('8088');
-    console.log('ChanProxy started at port 8088');
+ChanProxy.prototype.start = function (callback) {
+    var cb = callback || function () {};
+    this.server = this.app.listen(this.port, cb);
+    console.log('ChanProxy started at port ' + this.port);
 
 };
 
 ChanProxy.prototype.stop = function () {
-    this.app.stop();
+    this.server.close();
     console.log('ChanProxy stopped');
 };
 
 
 exports = module.exports = ChanProxy;
-
-var proxy = new ChanProxy();
-proxy.start();
+// Comment following links while using this as a proxy for chanarchive
+//var proxy = new ChanProxy();
+//proxy.start();

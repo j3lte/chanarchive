@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Archiver for chans in NodeJS",
   "main": "chanarchive.js",
   "bin": {
@@ -17,6 +17,7 @@
     "4chan",
     "420chan",
     "8chan",
+    "7chan",
     "imageboard",
     "download",
     "chan",

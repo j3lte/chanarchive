@@ -2,7 +2,7 @@
     "node"          : true,
     "indent"        : 4,
     "maxerr"        : 100,
-    "bitwise"       : true,
+    "bitwise"       : false,
     "curly"         : true,
     "eqeqeq"        : true,
     "forin"         : true,
@@ -41,5 +41,6 @@
     "shadow"        : false,
     "sub"           : false,
     "supernew"      : false,
-    "validthis"     : false
+    "validthis"     : false,
+    "-W044"          : true
 }

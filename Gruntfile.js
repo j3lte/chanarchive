@@ -13,6 +13,7 @@ module.exports = function (grunt) {
             all: [
                 "Gruntfile.js",
                 "index.js",
+                "proxy/*.js",
                 "bin/*.js",
                 "lib/*.js"
             ],
