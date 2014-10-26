@@ -7,6 +7,10 @@ pids
 lib-cov
 coverage
 .grunt
-build/Release
 node_modules
 chanarchive/
+
+# folders that can be created during testing
+4chan/
+8chan/
+420chan/

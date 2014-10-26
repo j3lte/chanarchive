@@ -24,6 +24,7 @@ It will create a folder called based on the chan, where it stores the current th
 ## Supported Chans:
 
   * 4CHAN   ::  `http://boards.4chan.org/<BOARD>/thread/<THREAD>`
+  * 8CHAN   ::  `https://8chan.co/<BOARD>/res/<THREAD>.html`
   * 420CHAN ::  `http://boards.420chan.org/<BOARD>/res/<THREAD>.php`
 
 ## Todo
