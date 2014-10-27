@@ -12,16 +12,41 @@ module.exports = function (grunt) {
         jshint: {
             all: [
                 "Gruntfile.js",
-                "index.js",
-                "proxy/**/*.js",
-                "bin/*.js",
-                "lib/*.js"
+                "src/**/*.js",
             ],
             options: {
                 jshintrc : '.jshintrc',
                 reporter: require('jshint-stylish'),
                 force: false
             }
+        },
+        uglify: {
+            options: {
+                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                        '<%= grunt.template.today("yyyy-mm-dd") %> */',
+                mangle: {toplevel: true},
+                squeeze: {dead_code: false},
+                codegen: {quote_keys: true}
+            },
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: '**/*.js',
+                    dest: ''
+                }]
+            }
+        },
+        shell: {
+            options: {
+                stderr: false
+            },
+            target: {
+                command: 'npm-shrinkwrap'
+            }
+        },
+        clean: {
+            build: ["npm-shrinkwrap.json"]
         },
         watch : {
             jshint : {
@@ -32,10 +57,14 @@ module.exports = function (grunt) {
     });
 
     // These plugins provide necessary tasks.
+    grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
     grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('build', ['jshint', 'uglify', 'clean', 'shell']);
     grunt.registerTask('dev', ['jshint', 'watch']);
 };

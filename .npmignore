@@ -12,6 +12,9 @@ testing.js
 coverage.html
 lib-cov
 
+temp/
+src/
+
 # folders that can be created during testing
 4chan/
 7chan/

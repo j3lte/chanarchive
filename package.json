@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Archiver for imageboards in NodeJS",
   "main": "chanarchive.js",
   "bin": {
@@ -54,8 +54,12 @@
   },
   "devDependencies": {
     "grunt": "*",
+    "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "*",
+    "grunt-shell": "^1.1.1",
+    "grunt-shrinkwrap": "^0.1.1",
     "jshint-stylish": "*"
   }
 }

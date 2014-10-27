@@ -14,7 +14,7 @@
 
 var express = require('express'),
     request = require('request'),
-    version = require('../package').version,
+    version = require('../../package').version,
     headers = {
         'User-Agent':'Chanarchive/' + version
     },
