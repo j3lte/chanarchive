@@ -1,7 +1,7 @@
 {
   "name": "chanarchive",
   "version": "0.3.0",
-  "description": "Archiver for chans in NodeJS",
+  "description": "Archiver for imageboards in NodeJS",
   "main": "chanarchive.js",
   "bin": {
     "chanarchive": "./bin/chanarchive"
