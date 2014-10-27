@@ -11,3 +11,9 @@ testing.js
 .DS_Store
 coverage.html
 lib-cov
+
+# folders that can be created during testing
+4chan/
+7chan/
+8chan/
+420chan/

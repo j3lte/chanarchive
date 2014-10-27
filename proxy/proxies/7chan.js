@@ -1,4 +1,13 @@
-var path = require('path');
+'use strict';
+
+/**
+ * 7CHAN handler
+ * Based on design seen @ October 27, 2014
+ * If anything is broken (due to design change), report it at :: https://github.com/j3lte/chanarchive/issues
+ */
+
+var path = require('path'),
+    proxyType;
 
 exports = module.exports = proxyType = {
     postClass : '.post',
@@ -49,4 +58,4 @@ exports = module.exports = proxyType = {
         }
         return post;
     }
-}
+};

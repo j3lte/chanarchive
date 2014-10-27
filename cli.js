@@ -37,7 +37,7 @@ argv = optimist
             '',
             '* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may',
             '  break when the website decides to change the design. If you have problems, report them on my Github page:',
-            '  https://github.com/j3lte/chanarchive'
+            '  https://github.com/j3lte/chanarchive/issues'
         ].join('\n'))
     .boolean('o')
     .alias('o', 'original-filenames')

@@ -3,9 +3,9 @@ chanarchive
 
 [![NPM](https://nodei.co/npm/chanarchive.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/chanarchive/)
 
-Archiver for chans in NodeJS
+Archiver for imageboards in NodeJS
 
-Based on the idea of [4chan](https://github.com/ypocat/4chan) by [ypocat](https://github.com/ypocat), and my original [Gist](https://gist.github.com/j3lte/5326383). It archives a thread on a chan. Partly based on [4chan-downloader](https://www.npmjs.org/package/4chan-downloader).
+Based on the idea of [4chan](https://github.com/ypocat/4chan) by [ypocat](https://github.com/ypocat), and my original [Gist](https://gist.github.com/j3lte/5326383). It archives a thread on an imageboard. Partly based on [4chan-downloader](https://www.npmjs.org/package/4chan-downloader).
 
 ## Usage
 
@@ -17,15 +17,22 @@ Then proceed as follows:
 
     chanarchive [options] <URL>
 
-Call the program with the `--help` option to see more options
+Call the program with the `-h` or `--help` option to see more options
 
-It will create a folder called based on the chan, where it stores the current thread.
+It will create a folder called based on the imageboard, where it stores the current thread.
 
 ## Supported Chans:
 
   * 4CHAN   ::  `http://boards.4chan.org/<BOARD>/thread/<THREAD>`
+  * 7CHAN*  ::  `http://7chan.org/<BOARD>/res/<THREAD>`
   * 8CHAN   ::  `https://8chan.co/<BOARD>/res/<THREAD>.html`
   * 420CHAN ::  `http://boards.420chan.org/<BOARD>/res/<THREAD>.php`
+
+## Local proxy
+
+Some of the imageboards (see above marked with a *) do not have a JSON API, so I decided to use a local proxy. Basically, chanarchive starts a local proxy where it does the requests. The local proxy returns a valid JSON that is parsed.
+
+See the `proxy\proxies` directory. It downloads the imageboard page, uses cheerio to parse it and returns a JSON that is somewhat equal to the 4chan API output. It is highly experimental and it is possible that it breaks, when the website decides to update it's design.
 
 ## Todo
 
