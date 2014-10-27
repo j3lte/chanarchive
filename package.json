@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.3.3",
+  "version": "0.3.3-1",
   "description": "Archiver for imageboards in NodeJS",
   "main": "chanarchive.js",
   "bin": {
