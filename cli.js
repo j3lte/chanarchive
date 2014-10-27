@@ -43,7 +43,7 @@ argv = optimist
     .alias('o', 'original-filenames')
         .describe('o', 'write original filenames instead of the timestamp filenames (does not always work)')
     .alias('e', 'ext')
-        .describe('e', 'only use the following extensions (comma seperated; eg: gif,jpeg,webm)')
+        .describe('e', 'only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)')
     .alias('w', 'watch')
         .describe('w', 'watch for new files.')
         .boolean('w')
@@ -78,6 +78,10 @@ function runChanArchiver() {
 
     if (argv.watch) {
         chanArchiver.setWatch(argv.interval * 1000);
+    }
+
+    if (argv.ext) {
+        chanArchiver.setExtensions(argv.ext);
     }
 
     chanArchiver.on('parse', function () {
