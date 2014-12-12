@@ -17,7 +17,7 @@ Then proceed as follows:
 
     chanarchive [options] <URL>
 
-Call the program with the `-h` or `--help` option to see more options
+Call the program with the `-h` or `--help` option to see more options. You can see the current output here in the [docs](https://github.com/j3lte/chanarchive/blob/master/docs/cli.md)
 
 It will create a folder called based on the imageboard, where it stores the current thread.
 

@@ -1,11 +1,18 @@
 /*
- * node-rdw
- * https://github.com/j3lte/node-rdw
+ * chanarchive
+ * https://github.com/j3lte/chanarchive
  *
  * Copyright (c) 2014 Jelte Lagendijk
  * Licensed under the MIT license.
  */
 'use strict';
+
+var docsCommand = [
+    'echo "## Output chanarchive\n" > ./docs/cli.md; ',
+    'echo "\\\`\\\`\\\`" >> ./docs/cli.md; ',
+    'node ./cli.js >> ./docs/cli.md; ',
+    'echo "\\\`\\\`\\\`" >> ./docs/cli.md;'].join('');
+
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -41,8 +48,11 @@ module.exports = function (grunt) {
             options: {
                 stderr: false
             },
-            target: {
+            shrinkwrap : {
                 command: 'npm-shrinkwrap'
+            },
+            cli_to_md: {
+                command: docsCommand
             }
         },
         clean: {
@@ -64,7 +74,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
-    grunt.registerTask('default', ['jshint']);
-    grunt.registerTask('build', ['jshint', 'uglify', 'clean', 'shell']);
-    grunt.registerTask('dev', ['jshint', 'watch']);
+    grunt.registerTask('default',   ['jshint']);
+    grunt.registerTask('docs',      ['shell:cli_to_md']);
+    grunt.registerTask('build',     ['jshint', 'uglify', 'clean', 'docs', 'shell:shrinkwrap']);
+    grunt.registerTask('dev',       ['jshint', 'watch']);
 };
