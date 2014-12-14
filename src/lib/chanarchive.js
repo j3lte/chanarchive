@@ -40,6 +40,7 @@ function ChanArchiver (options) {
         this.proxyUrl = 'http://localhost:' + proxyPort + '/?url=' + options.url;
     }
 
+    this.url = options.url;
     this.type = options.chan.alias;
     this._originalFilenames = false;
 
@@ -59,6 +60,8 @@ function ChanArchiver (options) {
 
     this.board = options.url.split(/\/|\?|&|=|\./g)[options.chan.b];
     this.thread = options.url.split(/\/|\?|&|=|\./g)[options.chan.t];
+
+    this.name = this.type + '/' + this.board + '/' + this.thread;
 }
 
 util.inherits(ChanArchiver, Emitter);

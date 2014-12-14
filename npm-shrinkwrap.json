@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "npm-shrinkwrap-version": "5.1.0",
   "dependencies": {
     "chalk": {
