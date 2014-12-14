@@ -39,11 +39,10 @@ argv = optimist
             '  8CHAN   :: https://8chan.co/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
             '  420CHAN :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php',
             '',
-            ' If you experience issues, report them here: ' + chalk.green('https://github.com/j3lte/chanarchive/issues'),
-            '',
             '* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may',
-            '  break when the website decides to change the design. If you have problems, report them on my Github page:',
-            '  https://github.com/j3lte/chanarchive/issues'
+            '  break when the website decides to change the design.',
+            '',
+            ' If you experience issues, report them here: ' + chalk.green('https://github.com/j3lte/chanarchive/issues')
         ].join('\n'))
     .boolean('o')
     .alias('o', 'original-filenames')
