@@ -42,7 +42,9 @@ See the `proxy\proxies` directory. It downloads the imageboard page, uses cheeri
 
 ## Todo
 
-  * Download multiple boards
+  * ~~Download multiple boards~~ Supported since 0.3.5
+  * Download a complete page (as in, all threads on front-page of some board)
+  * Generate a HTML page/template for offline viewing the thread
   * Add checksums to the files
 
 ## License
