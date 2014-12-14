@@ -18,29 +18,33 @@ var fs = require('fs'),
     Emitter = require('events').EventEmitter,
     util = require('util');
 
-function ChanArchiver (chan, url, currentFolder) {
+function ChanArchiver (options) {
 
     if (!(this instanceof ChanArchiver)) {
-        return new ChanArchiver(chan, url, currentFolder);
+        return new ChanArchiver(options);
     }
     Emitter.call(this);
 
-    _.extend(this, chan);
+    if (!options.chan) {
+        this.emit('error', new Error('ChanArchiver not properly configured. Missing options.url'));
+    }
 
-    if (!chan.alias) {
+    _.extend(this, options.chan);
+
+    if (!options.chan.alias) {
         this.emit('error', new Error('Unknown board type'));
     }
 
-    if (chan.useProxy) {
-        var proxyPort = chan.proxyPort || 8088;
-        this.proxyUrl = 'http://localhost:' + proxyPort + '/?url=' + url;
+    if (options.chan.useProxy) {
+        var proxyPort = options.chan.proxyPort || 8088;
+        this.proxyUrl = 'http://localhost:' + proxyPort + '/?url=' + options.url;
     }
 
-    this.type = chan.alias;
+    this.type = options.chan.alias;
     this._originalFilenames = false;
 
-    var folderRoot = currentFolder || './';
-    this.saveFolder = folderRoot + chan.alias + '/';
+    var folderRoot = options.folder || './';
+    this.saveFolder = folderRoot + options.chan.alias + '/';
 
     this._extensions = null;
 
@@ -53,8 +57,8 @@ function ChanArchiver (chan, url, currentFolder) {
     this._concurrentThreads = 1;
     this._watchTimeOut = null;
 
-    this.board = url.split(/\/|\?|&|=|\./g)[chan.b];
-    this.thread = url.split(/\/|\?|&|=|\./g)[chan.t];
+    this.board = options.url.split(/\/|\?|&|=|\./g)[options.chan.b];
+    this.thread = options.url.split(/\/|\?|&|=|\./g)[options.chan.t];
 }
 
 util.inherits(ChanArchiver, Emitter);
@@ -243,14 +247,6 @@ ChanArchiver.prototype.stop = function () {
         clearTimeout(this.downloadTimeoutID);
         this.emit('end');
     }
-};
-
-String.prototype.hex2bin = function () {
-  var i = 0, l = this.length - 1, bytes = [];
-  for (i; i < l; i += 2) {
-    bytes.push(parseInt(this.substr(i, 2), 16));
-  }
-  return String.fromCharCode.apply(String, bytes);
 };
 
 module.exports = ChanArchiver;

@@ -18,6 +18,7 @@ var banner = [
 '       \\____)|_| |_|\\_____||_| |_|\\_____||_|     \\____)|_| |_||_|  \\_/  |_____)',
 '                                                                                 ',
 '                                                                Version : ' + chalk.cyan(require('./package').version),
+'                                                                By      : ' + chalk.cyan('@j3lte'),
 ''].join('\n');
 
 console.log(banner);
@@ -29,7 +30,7 @@ argv = optimist
             '',
             ' Run in the directory where you want the archive to be downloaded.',
             '',
-            ' Usage: chanarchive [OPTIONS] <URL>',
+            ' Usage: ' + chalk.bold.cyan('chanarchive [OPTIONS] <URL>'),
             '',
             ' Current supported urls are',
             '',
@@ -37,6 +38,8 @@ argv = optimist
             '  7CHAN * :: http://7chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
             '  8CHAN   :: https://8chan.co/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
             '  420CHAN :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php',
+            '',
+            ' If you experience issues, report them here: ' + chalk.green('https://github.com/j3lte/chanarchive/issues'),
             '',
             '* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may',
             '  break when the website decides to change the design. If you have problems, report them on my Github page:',
@@ -153,16 +156,27 @@ ChanTypes.get(url, function (type) {
             type.proxyPort = argv.p;
 
             proxy.start(function () {
-                chanArchiver = new ChanArchiver(type, url, currentFolder);
+                chanArchiver = new ChanArchiver({
+                    chan : type,
+                    url : url,
+                    folder : currentFolder
+                });
                 runChanArchiver();
             });
         } else {
-            chanArchiver = new ChanArchiver(type, url, currentFolder);
+            chanArchiver = new ChanArchiver({
+                chan : type,
+                url : url,
+                folder : currentFolder
+            });
             runChanArchiver();
         }
     } else {
         console.log(optimist.help());
         console.log(chalk.red('\n\nUnsupported url'));
+        if (proxy) {
+            proxy.stop();
+        }
         process.exit();
     }
 });

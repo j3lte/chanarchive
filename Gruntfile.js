@@ -13,6 +13,12 @@ var docsCommand = [
     'node ./cli.js >> ./docs/cli.md; ',
     'echo "\\\`\\\`\\\`" >> ./docs/cli.md;'].join('');
 
+var genericBanner = [
+    '/*\n ----- <%= pkg.name %> - version <%= pkg.version %> -----',
+    'Last build date : <%= grunt.template.today("yyyy-mm-dd") %>',
+    'Source : <%= pkg.homepage %>\n*/\n',
+].join('\n');
+
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -29,8 +35,7 @@ module.exports = function (grunt) {
         },
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                        '<%= grunt.template.today("yyyy-mm-dd") %> */',
+                banner: genericBanner,
                 mangle: {toplevel: true},
                 squeeze: {dead_code: false},
                 codegen: {quote_keys: true}
