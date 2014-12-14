@@ -2,6 +2,9 @@ chanarchive
 ===========
 
 [![NPM](https://nodei.co/npm/chanarchive.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/chanarchive/)
+[![DAVID](https://david-dm.org/j3lte/chanarchive.png)](https://david-dm.org/j3lte/chanarchive)
+[![npm version](https://badge.fury.io/js/chanarchive.svg)](http://badge.fury.io/js/chanarchive)
+[![Development Dependency Status](https://david-dm.org/j3lte/chanarchive/dev-status.svg?theme=shields.io)](https://david-dm.org/j3lte/chanarchive#info=devDependencies)
 
 Archiver for imageboards in NodeJS
 
@@ -37,12 +40,13 @@ See the `proxy\proxies` directory. It downloads the imageboard page, uses cheeri
 ## Todo
 
   * Download multiple boards
+  * Add checksums to the files
 
 ## License
 
 (The MIT License)
 
-Copyright (c) 2014 Jelte Lagendijk
+Copyright (c) 2014 Jelte Lagendijk <jwlagendijk@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -1,4 +1,4 @@
-### Output chanarchive
+## Output chanarchive
 
 ```
 
@@ -9,7 +9,7 @@
       ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \ V / | ____|
        \____)|_| |_|\_____||_| |_|\_____||_|     \____)|_| |_||_|  \_/  |_____)
                                                                                  
-                                                                Version : 0.3.3-1
+                                                                Version : 0.3.4
 
 
  Chan archiver
@@ -36,6 +36,7 @@ Options:
   -i, --interval            watching interval in seconds.                                                       [default: 10]
   -p, --proxy               when using local proxy (*see above) to parse, set port to listen serve local proxy  [default: 8088]
   -t, --threads             Num of concurrent downloads.                                                        [default: 10]
+  -d, --debug               Output verbose debug output                                                       
   -v, --version             prints current version                                                            
 
 ```

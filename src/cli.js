@@ -2,6 +2,7 @@
 
 var optimist = require('optimist'),
     chalk = require('chalk'),
+    currentFolder = require('path').resolve('./') + '/',
     argv, url, chanArchiver, proxy,
     ChanArchiver = require('./lib/chanarchive'),
     ChanTypes = require('./lib/chantypes'),
@@ -55,11 +56,14 @@ argv = optimist
     .alias('p', 'proxy')
         .describe('p', 'when using local proxy (*see above) to parse, set port to listen serve local proxy')
         .default('p', 8088)
-    .alias('v', 'version')
     .alias('t', 'threads')
         .describe('t', 'Num of concurrent downloads.')
         .default('t', 10)
-    .describe('v', 'prints current version')
+    .alias('d', 'debug')
+        .describe('d', 'Output verbose debug output')
+        .boolean('d')
+    .alias('v', 'version')
+        .describe('v', 'prints current version')
     .argv;
 
 url = argv._[0];
@@ -72,6 +76,10 @@ if (argv.version) {
 if (argv._.length !== 1 || url.indexOf('http') !== 0) {
     console.log(optimist.help());
     process.exit(0);
+}
+
+if (argv.debug) {
+    console.log('Using current folder to save: ' + currentFolder + '\n');
 }
 
 function runChanArchiver() {
@@ -91,22 +99,35 @@ function runChanArchiver() {
     });
 
     chanArchiver.on('end', function () {
-        console.log(' ' + chalk.green('Download finished.'));
+        console.log(' %s', chalk.green('Download finished.'));
         if (proxy) {
             proxy.stop();
         }
     });
 
     chanArchiver.on('file:error', function (err, file) {
-        console.log('file error');
+        console.log(chalk.red(' File error'));
         console.log(err);
     });
 
+    if (argv.debug) {
+        chanArchiver.on('file:start', function (file) {
+            console.log(' File start : %s, size: %s bytes', chalk.green(file.url), chalk.green(file.size));
+        });
+
+        chanArchiver.on('file:check', function (file) {
+            console.log(' File check : %s, md5: %s', chalk.green(file.fileName), chalk.green(file.md5sum));
+        });
+    }
+
     chanArchiver.on('file:end', function (file) {
         if (file.existed) {
-            console.log(' %s skipped, %s already exists', chalk.green(file.url), chalk.green(file.fileName));
+            console.log(' File : %s skipped, %s already exists', chalk.green(file.url), chalk.green(file.fileName));
         } else if (file.completed) {
-            console.log(' %s saved as %s', chalk.green(file.url), chalk.green(file.fileName));
+            console.log(' File : %s saved as %s', chalk.green(file.url), chalk.green(file.fileName));
+        }
+        if (argv.debug) {
+            console.log(' Queue/Current/Finished: %s/%s/%s', chalk.green(chanArchiver.queue.length), chalk.green(chanArchiver.a), chalk.green(chanArchiver.fin.length));
         }
     });
 
@@ -132,11 +153,11 @@ ChanTypes.get(url, function (type) {
             type.proxyPort = argv.p;
 
             proxy.start(function () {
-                chanArchiver = new ChanArchiver(type, url);
+                chanArchiver = new ChanArchiver(type, url, currentFolder);
                 runChanArchiver();
             });
         } else {
-            chanArchiver = new ChanArchiver(type, url);
+            chanArchiver = new ChanArchiver(type, url, currentFolder);
             runChanArchiver();
         }
     } else {

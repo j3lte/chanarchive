@@ -78,8 +78,4 @@ ChanProxy.prototype.stop = function () {
     console.log('ChanProxy stopped');
 };
 
-
 exports = module.exports = ChanProxy;
-// Comment following links while using this as a proxy for chanarchive
-//var proxy = new ChanProxy();
-//proxy.start();

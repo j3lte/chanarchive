@@ -18,10 +18,10 @@ var fs = require('fs'),
     Emitter = require('events').EventEmitter,
     util = require('util');
 
-function ChanArchiver (chan, url) {
+function ChanArchiver (chan, url, currentFolder) {
 
     if (!(this instanceof ChanArchiver)) {
-        return new ChanArchiver(chan, url);
+        return new ChanArchiver(chan, url, currentFolder);
     }
     Emitter.call(this);
 
@@ -38,15 +38,17 @@ function ChanArchiver (chan, url) {
 
     this.type = chan.alias;
     this._originalFilenames = false;
-    this.saveFolder = './' + chan.alias + '/';
+
+    var folderRoot = currentFolder || './';
+    this.saveFolder = folderRoot + chan.alias + '/';
 
     this._extensions = null;
 
     this.queue = [];
     this.fin = [];
+    this.a = 0; // currently busy
 
     this.downloadTimeoutID = null;
-    this.a = 0;
     this.abort = false;
     this._concurrentThreads = 1;
     this._watchTimeOut = null;
@@ -172,11 +174,13 @@ ChanArchiver.prototype.handleNext = function () {
 
     }
 
+    // RESPONSE (START)
     function r(res) {
         handleFile.size = parseInt(res.headers['content-length'], 10);
         _this.emit('file:start', handleFile);
     }
 
+    // ONDATA
     function d(chunk) {
         handleFile.completed += chunk.length;
         if (handleFile.size) {
@@ -186,16 +190,24 @@ ChanArchiver.prototype.handleNext = function () {
         _this.emit('file:progress', handleFile);
     }
 
+    // ERROR
     function e(err) {
         _this.emit('file:error', err, handleFile);
         fs.unlink(dest, function () {});
         next();
     }
 
+    // FINISH
     function f() {
         _this.emit('file:end', handleFile);
         _this.fin.push(handleFile.url);
         next();
+    }
+
+    // CHECK
+    function check() {
+        // FUTURE CHECKSUMS
+        _this.emit('file:check', handleFile);
     }
 
     function next() {
@@ -231,6 +243,14 @@ ChanArchiver.prototype.stop = function () {
         clearTimeout(this.downloadTimeoutID);
         this.emit('end');
     }
+};
+
+String.prototype.hex2bin = function () {
+  var i = 0, l = this.length - 1, bytes = [];
+  for (i; i < l; i += 2) {
+    bytes.push(parseInt(this.substr(i, 2), 16));
+  }
+  return String.fromCharCode.apply(String, bytes);
 };
 
 module.exports = ChanArchiver;
