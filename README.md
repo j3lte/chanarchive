@@ -6,6 +6,7 @@ chanarchive
 [![DAVID](https://david-dm.org/j3lte/chanarchive.png)](https://david-dm.org/j3lte/chanarchive)
 [![npm version](https://badge.fury.io/js/chanarchive.svg)](http://badge.fury.io/js/chanarchive)
 [![Development Dependency Status](https://david-dm.org/j3lte/chanarchive/dev-status.svg?theme=shields.io)](https://david-dm.org/j3lte/chanarchive#info=devDependencies)
+[![Code Climate](https://codeclimate.com/github/j3lte/chanarchive/badges/gpa.svg)](https://codeclimate.com/github/j3lte/chanarchive)
 
 Archiver for imageboards in NodeJS
 
