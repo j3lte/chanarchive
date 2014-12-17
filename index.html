@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Chanarchive by j3lte</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Chanarchive</h1>
+        <p>Archiver for imageboards in NodeJS</p>
+
+        <p class="view"><a href="https://github.com/j3lte/chanarchive">View the Project on GitHub <small>j3lte/chanarchive</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/j3lte/chanarchive/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/j3lte/chanarchive/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/j3lte/chanarchive">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="chanarchive" class="anchor" href="#chanarchive" aria-hidden="true"><span class="octicon octicon-link"></span></a>chanarchive</h1>
+
+<p><a href="https://nodei.co/npm/chanarchive/"><img src="https://nodei.co/npm/chanarchive.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
+
+<p><a href="https://david-dm.org/j3lte/chanarchive"><img src="https://david-dm.org/j3lte/chanarchive.png" alt="DAVID"></a>
+<a href="http://badge.fury.io/js/chanarchive"><img src="https://badge.fury.io/js/chanarchive.svg" alt="npm version"></a>
+<a href="https://david-dm.org/j3lte/chanarchive#info=devDependencies"><img src="https://david-dm.org/j3lte/chanarchive/dev-status.svg?theme=shields.io" alt="Development Dependency Status"></a>
+<a href="https://codeclimate.com/github/j3lte/chanarchive"><img src="https://codeclimate.com/github/j3lte/chanarchive/badges/gpa.svg" alt="Code Climate"></a></p>
+
+<p>Archiver for imageboards in NodeJS</p>
+
+<p>Based on the idea of <a href="https://github.com/ypocat/4chan">4chan</a> by <a href="https://github.com/ypocat">ypocat</a>, and my original <a href="https://gist.github.com/j3lte/5326383">Gist</a>. It archives a thread on an imageboard. Partly based on <a href="https://www.npmjs.org/package/4chan-downloader">4chan-downloader</a>.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Install Node.js if you don't have it yet. Then from the command line:</p>
+
+<pre><code>[sudo] npm install chanarchive -g
+</code></pre>
+
+<p>Then proceed as follows:</p>
+
+<pre><code>chanarchive [options] &lt;URL&gt; [&lt;URL2&gt; &lt;URL3&gt; ... ]
+</code></pre>
+
+<p>You can also use shortcodes! Shortcode: imageboard/board/thread, e.g.: 8chan/b/9000</p>
+
+<p>Call the program with the <code>-h</code> or <code>--help</code> option to see more options. You can see the current output here in the <a href="https://github.com/j3lte/chanarchive/blob/master/docs/cli.md">docs</a></p>
+
+<p>It will create a folder called based on the imageboard, where it stores the current thread.</p>
+
+<h2>
+<a id="supported-chans" class="anchor" href="#supported-chans" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supported Chans:</h2>
+
+<ul>
+<li>4CHAN   ::  <code>http://boards.4chan.org/&lt;BOARD&gt;/thread/&lt;THREAD&gt;</code>
+</li>
+<li>7CHAN*  ::  <code>http://7chan.org/&lt;BOARD&gt;/res/&lt;THREAD&gt;</code>
+</li>
+<li>8CHAN   ::  <code>https://8chan.co/&lt;BOARD&gt;/res/&lt;THREAD&gt;.html</code>
+</li>
+<li>420CHAN ::  <code>http://boards.420chan.org/&lt;BOARD&gt;/res/&lt;THREAD&gt;.php</code>
+</li>
+</ul>
+
+<h2>
+<a id="local-proxy" class="anchor" href="#local-proxy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Local proxy</h2>
+
+<p>Some of the imageboards (see above marked with a *) do not have a JSON API, so I decided to use a local proxy. Basically, chanarchive starts a local proxy where it does the requests. The local proxy returns a valid JSON that is parsed.</p>
+
+<p>See the <code>proxy\proxies</code> directory. It downloads the imageboard page, uses cheerio to parse it and returns a JSON that is somewhat equal to the 4chan API output. It is highly experimental and it is possible that it breaks, when the website decides to update it's design.</p>
+
+<h2>
+<a id="todo-see-history" class="anchor" href="#todo-see-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Todo (See <a href="https://github.com/j3lte/chanarchive/blob/master/History.md">history</a>)</h2>
+
+<ul>
+<li>Download a complete page (as in, all threads on front-page of some board)</li>
+<li>Choose folder where to store the downloaded files</li>
+<li>Generate a HTML page/template for offline viewing the thread</li>
+<li>Add checksums to the files</li>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://github.com/j3lte/chanarchive/blob/master/LICENSE">License</a>
+</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2014 Jelte Lagendijk <a href="mailto:jwlagendijk@gmail.com">jwlagendijk@gmail.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/j3lte">j3lte</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
