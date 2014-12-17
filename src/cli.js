@@ -1,11 +1,20 @@
 'use strict';
+/*
+ * chanarchive
+ * https://github.com/j3lte/chanarchive
+ *
+ * Copyright (c) 2014 Jelte Lagendijk
+ * Licensed under the MIT license.
+ */
 
 var optimist = require('optimist'),
     chalk = require('chalk'),
     _ = require('lodash'),
+    updateNotifier = require('update-notifier'),
     currentFolder = require('path').resolve('./') + '/',
+    pkg = require('./package.json'),
     argv, urls, proxy,
-    handled = 0,
+    todo = 0,
     archivers = [],
     ChanArchiver = require('./lib/chanarchive'),
     ChanTypes = require('./lib/chantypes'),
@@ -20,25 +29,33 @@ var banner = [
 '      ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \\ V / | ____|',
 '       \\____)|_| |_|\\_____||_| |_|\\_____||_|     \\____)|_| |_||_|  \\_/  |_____)',
 '                                                                                 ',
-'                                                                Version : ' + chalk.cyan(require('./package').version),
+'                                                                Version : ' + chalk.cyan(pkg.version),
 '                                                                By      : ' + chalk.cyan('@j3lte'),
 ''].join('\n');
 
 console.log(banner);
 
+updateNotifier({
+    packageName: pkg.name,
+    packageVersion: pkg.version
+}).notify();
+
 argv = optimist
     .usage([
             '',
-            ' ' + chalk.green('Chan archiver'),
+            ' ' + chalk.green('Chan archiver : imageboard downloader'),
             '',
             ' Run in the directory where you want the archive to be downloaded.',
             '',
-            ' Usage: ' + chalk.bold.cyan('chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]'),
+            ' Usage : ' + chalk.bold.cyan('chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]'),
             '',
-            ' Current supported urls are',
+            ' > You can also use a shortcode instead of url: ' + chalk.cyan('chan') + '/' + chalk.cyan('board') + '/' + chalk.cyan('thread'),
+            ' > E.g.: chanarchive 8chan/b/9000',
+            '',
+            ' Current supported imageboard urls are',
             '',
             '  4CHAN   :: http://boards.4chan.org/' + chalk.cyan('<BOARD>') + '/thread/' + chalk.cyan('<THREAD>'),
-            '  7CHAN * :: http://7chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
+            '  7CHAN*  :: http://7chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
             '  8CHAN   :: https://8chan.co/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
             '  420CHAN :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php',
             '',
@@ -72,13 +89,14 @@ argv = optimist
     .argv;
 
 urls = argv._;
+todo = urls.length;
 
 if (argv.version) {
     console.error(require('./package').version);
     process.exit(0);
 }
 
-if (argv._.length === 0) {
+if (urls.length === 0) {
     console.log(optimist.help());
     process.exit(0);
 }
@@ -89,6 +107,8 @@ if (argv.debug) {
 
 function runChanArchiver(archiver) {
     archiver.useOriginalFileNames(argv.o);
+
+    //var maxThreadsPerDownloader = Math.max(1, Math.floor(argv.threads / urls));
     archiver.setMaxThreads(argv.threads);
 
     if (argv.watch) {
@@ -104,7 +124,7 @@ function runChanArchiver(archiver) {
     });
 
     archiver.on('end', function () {
-        console.log(' [' + chalk.cyan(archiver.name) + '] %s', chalk.green(' Download finished for: ' + archiver.url));
+        console.log(' [' + chalk.cyan(archiver.name) + '] %s', chalk.bold.green(' Download finished for: ' + archiver.url));
         if (proxy) {
             proxy.stop();
         }
@@ -142,8 +162,11 @@ function runChanArchiver(archiver) {
 
     archiver.on('error', function (err) {
         console.log(' [' + chalk.cyan(archiver.name) + '] ' + chalk.red(' Error: ' + err.message));
-        if (proxy) {
-            proxy.stop();
+        todo--;
+        if (todo === 0) {
+            if (proxy) {
+               proxy.stop();
+            }
         }
     });
 
@@ -153,54 +176,46 @@ function runChanArchiver(archiver) {
     archiver.download();
 }
 
+function addChanArchiver (type, url) {
+    var chanArchiver = new ChanArchiver({
+        chan : type,
+        url : url,
+        folder : currentFolder
+    });
+    archivers.push(chanArchiver);
+    runChanArchiver(chanArchiver);
+}
+
 _.forEach(urls, function (url) {
-    if (url.indexOf('http') !== 0) {
-        console.log(chalk.red('\n\nUnsupported url : ' + url));
-    } else {
-        ChanTypes.get(url, function (type) {
-            if (type) {
-                if (type.useProxy && proxy === undefined) {
-                    proxy = new ChanProxy(type.useProxy);
+    ChanTypes.get(url, function (chan, returnUrl) {
+        if (chan) {
+            url = returnUrl || url;
+            if (chan.useProxy && proxy === undefined) {
+                proxy = new ChanProxy(chan.useProxy);
 
-                    proxy.port = argv.p;
-                    type.proxyPort = argv.p;
+                proxy.port = argv.p;
+                chan.proxyPort = argv.p;
 
-                    proxy.start(function () {
-                        var chanArchiver = new ChanArchiver({
-                            chan : type,
-                            url : url,
-                            folder : currentFolder
-                        });
-                        archivers.push(chanArchiver);
-                        runChanArchiver(chanArchiver);
-                    });
-                } else {
-                    var chanArchiver = new ChanArchiver({
-                        chan : type,
-                        url : url,
-                        folder : currentFolder
-                    });
-                    archivers.push(chanArchiver);
-                    runChanArchiver(chanArchiver);
-                }
+                proxy.start(function () {
+                    addChanArchiver(chan, url);
+                });
             } else {
-                //console.log(optimist.help());
-                console.log(chalk.red('\n\nUnsupported url : ' + url));
-                // if (proxy) {
-                //     proxy.stop();
-                // }
-                //process.exit();
+                addChanArchiver(chan, url);
             }
-        });
-    }
+        } else {
+            console.log(chalk.red('\n\nUnsupported url : ' + url));
+            todo--;
+            if (todo === 0) {
+                if (proxy) {
+                   proxy.stop();
+                }
+                process.exit();
+            }
+        }
+    });
 });
 
-
-
 process.on('SIGINT', function() {
-    _.each(archivers, function (archiver) {
-        archiver.stop();
-    });
     if (proxy) {
         proxy.stop();
     }

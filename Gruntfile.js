@@ -61,7 +61,10 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ["npm-shrinkwrap.json"]
+            build: [
+                "npm-shrinkwrap.json",
+                "*chan"
+            ]
         },
         watch : {
             jshint : {

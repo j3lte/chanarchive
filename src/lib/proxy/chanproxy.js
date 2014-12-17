@@ -1,15 +1,10 @@
 'use strict';
-/**
- * 7CHAN Proxy, will be more general in the future. For now, while developing, use the following to
- * test this proxy:
+/*
+ * chanarchive
+ * https://github.com/j3lte/chanarchive
  *
- * Install nodemon:
- * > npm install -g nodemon
- *
- * Uncomment last two lines
- *
- * Start proxy using nodemon
- * > nodemon ./chanproxy.js
+ * Copyright (c) 2014 Jelte Lagendijk
+ * Licensed under the MIT license.
  */
 
 var express = require('express'),

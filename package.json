@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "Archiver for imageboards in NodeJS",
   "main": "chanarchive.js",
   "bin": {
@@ -50,7 +50,8 @@
     "lodash": "^2.4.1",
     "mkdirp": "^0.5.0",
     "optimist": "^0.6.1",
-    "request": "^2.40.0"
+    "request": "^2.40.0",
+    "update-notifier": "^0.2.2"
   },
   "devDependencies": {
     "grunt": "*",

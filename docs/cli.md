@@ -9,20 +9,23 @@
       ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \ V / | ____|
        \____)|_| |_|\_____||_| |_|\_____||_|     \____)|_| |_||_|  \_/  |_____)
                                                                                  
-                                                                Version : 0.3.5
+                                                                Version : 0.4.0
                                                                 By      : @j3lte
 
 
- Chan archiver
+ Chan archiver : imageboard downloader
 
  Run in the directory where you want the archive to be downloaded.
 
- Usage: chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]
+ Usage : chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]
 
- Current supported urls are
+ > You can also use a shortcode instead of url: chan/board/thread
+ > E.g.: chanarchive 8chan/b/9000
+
+ Current supported imageboard urls are
 
   4CHAN   :: http://boards.4chan.org/<BOARD>/thread/<THREAD>
-  7CHAN * :: http://7chan.org/<BOARD>/res/<THREAD>.html
+  7CHAN*  :: http://7chan.org/<BOARD>/res/<THREAD>.html
   8CHAN   :: https://8chan.co/<BOARD>/res/<THREAD>.html
   420CHAN :: http://boards.420chan.org/<BOARD>/res/<THREAD>.php
 

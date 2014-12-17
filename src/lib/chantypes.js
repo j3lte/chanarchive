@@ -1,4 +1,12 @@
 'use strict';
+/*
+ * chanarchive
+ * https://github.com/j3lte/chanarchive
+ *
+ * Copyright (c) 2014 Jelte Lagendijk
+ * Licensed under the MIT license.
+ */
+
 var _ = require('lodash');
 
 var genericImagePostHandler = function (post) {
@@ -10,11 +18,19 @@ var genericImagePostHandler = function (post) {
     if (fileUrl && (!_this._extensions || _this._extensions.indexOf(post.ext) !== -1)) {
         _this.addFile(fileUrl, fullFileName);
     }
+
+    // 8chan extra files
+    if (post.extra_files && post.extra_files.length) {
+        _.each(post.extra_files, function (extra_file) {
+            _this.imagePostHandler(extra_file);
+        });
+    }
 };
 
 var chans = {
     '4chan' : {
         alias : '4chan',
+        templateUrl : 'http://boards.4chan.org/%s/thread/%s',
         regEx : /^http:\/\/boards\.4chan\.org\/(\w)+\/thread\/(\d)+/,
         baseUrl : 'http://a.4cdn.org/',
         del : '/thread/',
@@ -25,6 +41,7 @@ var chans = {
     },
     '7chan': {
         alias : '7chan',
+        templateUrl : 'http://7chan.org/%s/res/%s.html',
         regEx : /^http:\/\/7chan\.org\/(\w)+\/res\/(\d+)\.html/,
         //baseUrl : '',     // NOT USED
         //del : '/res/',    // NOT USED
@@ -36,6 +53,7 @@ var chans = {
     },
     '8chan': {
         alias : '8chan',
+        templateUrl : 'https://8chan.co/%s/res/%s.html',
         regEx : /^https:\/\/8chan\.co\/(\w)+\/res\/(\d+)\.html.*/,
         baseUrl : 'https://8chan.co/',
         del : '/res/',
@@ -46,6 +64,7 @@ var chans = {
     },
     '420chan' : {
         alias : '420chan',
+        templateUrl : 'http://boards.420chan.org/%s/res/%s.php',
         regEx : /^http:\/\/boards\.420chan\.org\/(\w){1,}\/res\/(\d){1,}\.php.*/,
         baseUrl : 'http://api.420chan.org/',
         del : '/res/',
@@ -61,11 +80,28 @@ var chans = {
     }
 };
 
+var shortRegEx = /(4|7|8|420)chan\/(\w+)\/(\d+)/;
+
 function get (url, callback) {
-    var chan = _.find(chans, function (chan) {
-        return chan.regEx.test(url);
-    });
-    callback(chan);
+    var chan,
+        returnUrl = null;
+
+    if (shortRegEx.test(url)) {
+        // Shortcode
+        var p = url.split('/');
+
+        chan = chans[p[0]];
+        returnUrl = chan.templateUrl.replace('%s', p[1]).replace('%s', p[2]);
+
+        callback(chan, returnUrl);
+    } else {
+        // Basic url
+        chan = _.find(chans, function (chan) {
+            return chan.regEx.test(url);
+        });
+        callback(chan, returnUrl);
+    }
+
 }
 
 module.exports.get = get;

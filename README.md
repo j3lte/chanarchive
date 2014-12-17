@@ -21,9 +21,9 @@ Then proceed as follows:
 
     chanarchive [options] <URL> [<URL2> <URL3> ... ]
 
-Call the program with the `-h` or `--help` option to see more options. You can see the current output here in the [docs](https://github.com/j3lte/chanarchive/blob/master/docs/cli.md)
+You can also use shortcodes! Shortcode: imageboard/board/thread, e.g.: 8chan/b/9000
 
-**Version 0.3.5 :: Now supports downloading multiple boards at once!**
+Call the program with the `-h` or `--help` option to see more options. You can see the current output here in the [docs](https://github.com/j3lte/chanarchive/blob/master/docs/cli.md)
 
 It will create a folder called based on the imageboard, where it stores the current thread.
 
@@ -40,14 +40,13 @@ Some of the imageboards (see above marked with a *) do not have a JSON API, so I
 
 See the `proxy\proxies` directory. It downloads the imageboard page, uses cheerio to parse it and returns a JSON that is somewhat equal to the 4chan API output. It is highly experimental and it is possible that it breaks, when the website decides to update it's design.
 
-## Todo
+## Todo (See [history](https://github.com/j3lte/chanarchive/blob/master/History.md))
 
-  * ~~Download multiple boards~~ Supported since 0.3.5
   * Download a complete page (as in, all threads on front-page of some board)
   * Generate a HTML page/template for offline viewing the thread
   * Add checksums to the files
 
-## License
+## [License](https://github.com/j3lte/chanarchive/blob/master/LICENSE)
 
 (The MIT License)
 
