@@ -44,6 +44,7 @@ See the `proxy\proxies` directory. It downloads the imageboard page, uses cheeri
 ## Todo (See [history](https://github.com/j3lte/chanarchive/blob/master/History.md))
 
   * Download a complete page (as in, all threads on front-page of some board)
+  * Choose folder where to store the downloaded files
   * Generate a HTML page/template for offline viewing the thread
   * Add checksums to the files
 
