@@ -1,6 +1,224 @@
+'use strict';
 /*
- ----- chanarchive - version 0.4.0 -----
-Last build date : 2014-12-17
-Source : https://github.com/j3lte/chanarchive
-*/
-"use strict";function a(a){a.useOriginalFileNames(i.o),a.setMaxThreads(i.threads),i.watch&&a.setWatch(1e3*i.interval),i.ext&&a.setExtensions(i.ext),a.on("parse",function(){console.log(" ["+d.cyan(a.name)+"] "+d.green(a.queue.length)+" new files to download")}),a.on("end",function(){console.log(" ["+d.cyan(a.name)+"] %s",d.bold.green(" Download finished for: "+a.url)),k&&k.stop();var b=e.findIndex(m,function(b){return b.name===a.name});b>=0&&m.splice(b,1)}),a.on("file:error",function(b){console.log(d.red(" ["+d.cyan(a.name)+"] File error")),console.log(b)}),i.debug&&(a.on("file:start",function(b){console.log(" ["+d.cyan(a.name)+"] File start : %s, size: %s bytes",d.green(b.url),d.green(b.size))}),a.on("file:check",function(b){console.log(" ["+d.cyan(a.name)+"] File check : %s, md5: %s",d.green(b.fileName),d.green(b.md5sum))})),a.on("file:end",function(b){b.existed?console.log(" ["+d.cyan(a.name)+"] File : %s skipped, %s already exists",d.green(b.url),d.green(b.fileName)):b.completed&&console.log(" ["+d.cyan(a.name)+"] File : %s saved as %s",d.green(b.url),d.green(b.fileName)),i.debug&&console.log(" ["+d.cyan(a.name)+"] Queue/Current/Finished: %s/%s/%s",d.green(a.queue.length),d.green(a.a),d.green(a.fin.length))}),a.on("error",function(b){console.log(" ["+d.cyan(a.name)+"] "+d.red(" Error: "+b.message)),l--,0===l&&k&&k.stop()}),require("http").globalAgent.maxSockets=require("https").globalAgent.maxSockets=Math.max(i.threads,10),a.download()}function b(b,c){var d=new n({chan:b,url:c,folder:g});m.push(d),a(d)}var c=require("optimist"),d=require("chalk"),e=require("lodash"),f=require("update-notifier"),g=require("path").resolve("./")+"/",h=require("./package.json"),i,j,k,l=0,m=[],n=require("./lib/chanarchive"),o=require("./lib/chantypes"),p=require("./lib/proxy/chanproxy"),q=["","              _                                         _      _               ","             | |                                       | |    (_)              ","        ____ | |__   _____  ____   _____   ____   ____ | |__   _  _   _  _____ ","       / ___)|  _ \\ (____ ||  _ \\ (____ | / ___) / ___)|  _ \\ | || | | || ___ |","      ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \\ V / | ____|","       \\____)|_| |_|\\_____||_| |_|\\_____||_|     \\____)|_| |_||_|  \\_/  |_____)","                                                                                 ","                                                                Version : "+d.cyan(h.version),"                                                                By      : "+d.cyan("@j3lte"),""].join("\n");console.log(q),f({packageName:h.name,packageVersion:h.version}).notify(),i=c.usage([""," "+d.green("Chan archiver : imageboard downloader"),""," Run in the directory where you want the archive to be downloaded.",""," Usage : "+d.bold.cyan("chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]"),""," > You can also use a shortcode instead of url: "+d.cyan("chan")+"/"+d.cyan("board")+"/"+d.cyan("thread")," > E.g.: chanarchive 8chan/b/9000",""," Current supported imageboard urls are","","  4CHAN   :: http://boards.4chan.org/"+d.cyan("<BOARD>")+"/thread/"+d.cyan("<THREAD>"),"  7CHAN*  :: http://7chan.org/"+d.cyan("<BOARD>")+"/res/"+d.cyan("<THREAD>")+".html","  8CHAN   :: https://8chan.co/"+d.cyan("<BOARD>")+"/res/"+d.cyan("<THREAD>")+".html","  420CHAN :: http://boards.420chan.org/"+d.cyan("<BOARD>")+"/res/"+d.cyan("<THREAD>")+".php","","* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may","  break when the website decides to change the design.",""," If you experience issues, report them here: "+d.green("https://github.com/j3lte/chanarchive/issues")].join("\n"))["boolean"]("o").alias("o","original-filenames").describe("o","write original filenames instead of the timestamp filenames (does not always work)").alias("e","ext").describe("e","only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)").alias("w","watch").describe("w","watch for new files.")["boolean"]("w").alias("i","interval").describe("i","watching interval in seconds.")["default"]("i",10).alias("p","proxy").describe("p","when using local proxy (*see above) to parse, set port to listen serve local proxy")["default"]("p",8088).alias("t","threads").describe("t","Num of concurrent downloads (max 10).")["default"]("t",10).alias("d","debug").describe("d","Verbose debug output")["boolean"]("d").alias("v","version").describe("v","prints current version").argv,j=i._,l=j.length,i.version&&(console.error(require("./package").version),process.exit(0)),0===j.length&&(console.log(c.help()),process.exit(0)),i.debug&&console.log("Using current folder to save: "+g+"\n"),e.forEach(j,function(a){o.get(a,function(c,e){c?(a=e||a,c.useProxy&&void 0===k?(k=new p(c.useProxy),k.port=i.p,c.proxyPort=i.p,k.start(function(){b(c,a)})):b(c,a)):(console.log(d.red("\n\nUnsupported url : "+a)),l--,0===l&&(k&&k.stop(),process.exit()))})}),process.on("SIGINT",function(){return k&&k.stop(),console.log("\nCTRL+C. Chan archiver exit."),process.exit()});
+ * chanarchive
+ * https://github.com/j3lte/chanarchive
+ *
+ * Copyright (c) 2014 Jelte Lagendijk
+ * Licensed under the MIT license.
+ */
+
+var optimist = require('optimist'),
+    chalk = require('chalk'),
+    _ = require('lodash'),
+    updateNotifier = require('update-notifier'),
+    currentFolder = require('path').resolve('./') + '/',
+    pkg = require('./package.json'),
+    argv, urls, proxy,
+    todo = 0,
+    archivers = [],
+    ChanArchiver = require('./lib/chanarchive'),
+    ChanTypes = require('./lib/chantypes'),
+    ChanProxy = require('./lib/proxy/chanproxy');
+
+var banner = [
+'',
+'              _                                         _      _               ',
+'             | |                                       | |    (_)              ',
+'        ____ | |__   _____  ____   _____   ____   ____ | |__   _  _   _  _____ ',
+'       / ___)|  _ \\ (____ ||  _ \\ (____ | / ___) / ___)|  _ \\ | || | | || ___ |',
+'      ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \\ V / | ____|',
+'       \\____)|_| |_|\\_____||_| |_|\\_____||_|     \\____)|_| |_||_|  \\_/  |_____)',
+'                                                                                 ',
+'                                                                Version : ' + chalk.cyan(pkg.version),
+'                                                                By      : ' + chalk.cyan('@j3lte'),
+''].join('\n');
+
+console.log(banner);
+
+updateNotifier({
+    packageName: pkg.name,
+    packageVersion: pkg.version
+}).notify();
+
+argv = optimist
+    .usage([
+            '',
+            ' ' + chalk.green('Chan archiver : imageboard downloader'),
+            '',
+            ' Run in the directory where you want the archive to be downloaded.',
+            '',
+            ' Usage : ' + chalk.bold.cyan('chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]'),
+            '',
+            ' > You can also use a shortcode instead of url: ' + chalk.cyan('chan') + '/' + chalk.cyan('board') + '/' + chalk.cyan('thread'),
+            ' > E.g.: chanarchive 8chan/b/9000',
+            '',
+            ' Current supported imageboard urls are',
+            '',
+            '  4CHAN   :: http://boards.4chan.org/' + chalk.cyan('<BOARD>') + '/thread/' + chalk.cyan('<THREAD>'),
+            '  7CHAN*  :: http://7chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
+            '  8CHAN   :: https://8chan.co/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
+            '  420CHAN :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php',
+            '',
+            '* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may',
+            '  break when the website decides to change the design.',
+            '',
+            ' If you experience issues, report them here: ' + chalk.green('https://github.com/j3lte/chanarchive/issues')
+        ].join('\n'))
+    .boolean('o')
+    .alias('o', 'original-filenames')
+        .describe('o', 'write original filenames instead of the timestamp filenames (does not always work)')
+    .alias('e', 'ext')
+        .describe('e', 'only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)')
+    .alias('w', 'watch')
+        .describe('w', 'watch for new files.')
+        .boolean('w')
+    .alias('i', 'interval')
+        .describe('i', 'watching interval in seconds.')
+        .default('i', 10)
+    .alias('p', 'proxy')
+        .describe('p', 'when using local proxy (*see above) to parse, set port to listen serve local proxy')
+        .default('p', 8088)
+    .alias('t', 'threads')
+        .describe('t', 'Num of concurrent downloads (max 10).')
+        .default('t', 10)
+    .alias('d', 'debug')
+        .describe('d', 'Verbose debug output')
+        .boolean('d')
+    .alias('v', 'version')
+        .describe('v', 'prints current version')
+    .argv;
+
+urls = argv._;
+todo = urls.length;
+
+if (argv.version) {
+    console.error(require('./package').version);
+    process.exit(0);
+}
+
+if (urls.length === 0) {
+    console.log(optimist.help());
+    process.exit(0);
+}
+
+if (argv.debug) {
+    console.log('Using current folder to save: ' + currentFolder + '\n');
+}
+
+function runChanArchiver(archiver) {
+    archiver.useOriginalFileNames(argv.o);
+
+    //var maxThreadsPerDownloader = Math.max(1, Math.floor(argv.threads / urls));
+    archiver.setMaxThreads(argv.threads);
+
+    if (argv.watch) {
+        archiver.setWatch(argv.interval * 1000);
+    }
+
+    if (argv.ext) {
+        archiver.setExtensions(argv.ext);
+    }
+
+    archiver.on('parse', function () {
+        console.log(' [' + chalk.cyan(archiver.name) + '] ' + chalk.green(archiver.queue.length) + ' new files to download');
+    });
+
+    archiver.on('end', function () {
+        console.log(' [' + chalk.cyan(archiver.name) + '] %s', chalk.bold.green(' Download finished for: ' + archiver.url));
+        if (proxy) {
+            proxy.stop();
+        }
+        var index = _.findIndex(archivers, function(archive) { return archive.name === archiver.name; });
+        if (index >= 0) {
+            archivers.splice(index, 1);
+        }
+    });
+
+    archiver.on('file:error', function (err, file) {
+        console.log(chalk.red(' [' + chalk.cyan(archiver.name) + '] File error'));
+        console.log(err);
+    });
+
+    if (argv.debug) {
+        archiver.on('file:start', function (file) {
+            console.log(' [' + chalk.cyan(archiver.name) + '] File start : %s, size: %s bytes', chalk.green(file.url), chalk.green(file.size));
+        });
+
+        archiver.on('file:check', function (file) {
+            console.log(' [' + chalk.cyan(archiver.name) + '] File check : %s, md5: %s', chalk.green(file.fileName), chalk.green(file.md5sum));
+        });
+    }
+
+    archiver.on('file:end', function (file) {
+        if (file.existed) {
+            console.log(' [' + chalk.cyan(archiver.name) + '] File : %s skipped, %s already exists', chalk.green(file.url), chalk.green(file.fileName));
+        } else if (file.completed) {
+            console.log(' [' + chalk.cyan(archiver.name) + '] File : %s saved as %s', chalk.green(file.url), chalk.green(file.fileName));
+        }
+        if (argv.debug) {
+            console.log(' [' + chalk.cyan(archiver.name) + '] Queue/Current/Finished: %s/%s/%s', chalk.green(archiver.queue.length), chalk.green(archiver.a), chalk.green(archiver.fin.length));
+        }
+    });
+
+    archiver.on('error', function (err) {
+        console.log(' [' + chalk.cyan(archiver.name) + '] ' + chalk.red(' Error: ' + err.message));
+        todo--;
+        if (todo === 0) {
+            if (proxy) {
+               proxy.stop();
+            }
+        }
+    });
+
+    require('http').globalAgent.maxSockets =
+    require('https').globalAgent.maxSockets = Math.max(argv.threads, 10);
+
+    archiver.download();
+}
+
+function addChanArchiver (type, url) {
+    var chanArchiver = new ChanArchiver({
+        chan : type,
+        url : url,
+        folder : currentFolder
+    });
+    archivers.push(chanArchiver);
+    runChanArchiver(chanArchiver);
+}
+
+_.forEach(urls, function (url) {
+    ChanTypes.get(url, function (chan, returnUrl) {
+        if (chan) {
+            url = returnUrl || url;
+            if (chan.useProxy && proxy === undefined) {
+                proxy = new ChanProxy(chan.useProxy);
+
+                proxy.port = argv.p;
+                chan.proxyPort = argv.p;
+
+                proxy.start(function () {
+                    addChanArchiver(chan, url);
+                });
+            } else {
+                addChanArchiver(chan, url);
+            }
+        } else {
+            console.log(chalk.red('\n\nUnsupported url : ' + url));
+            todo--;
+            if (todo === 0) {
+                if (proxy) {
+                   proxy.stop();
+                }
+                process.exit();
+            }
+        }
+    });
+});
+
+process.on('SIGINT', function() {
+    if (proxy) {
+        proxy.stop();
+    }
+    console.log('\nCTRL+C. Chan archiver exit.');
+    return process.exit();
+});

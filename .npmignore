@@ -2,7 +2,7 @@
 docs/
 examples/
 support/
-tests/
+test/
 out/
 chanarchive/
 test.js
