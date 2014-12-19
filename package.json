@@ -1,13 +1,13 @@
 {
   "name": "chanarchive",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Archiver for imageboards in NodeJS",
   "main": "chanarchive.js",
   "bin": {
     "chanarchive": "./bin/chanarchive"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -60,6 +60,8 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-watch": "*",
     "grunt-shell": "^1.1.1",
-    "jshint-stylish": "*"
+    "grunt-simple-mocha": "^0.4.0",
+    "jshint-stylish": "*",
+    "mocha": "^2.0.1"
   }
 }

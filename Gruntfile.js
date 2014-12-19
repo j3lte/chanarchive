@@ -19,7 +19,8 @@ module.exports = function (grunt) {
         jshint: {
             all: [
                 "Gruntfile.js",
-                "src/**/*.js",
+                "cli.js",
+                "lib/**/*.js",
             ],
             options: {
                 jshintrc : '.jshintrc',
@@ -53,6 +54,10 @@ module.exports = function (grunt) {
                 files : '<%= jshint.all %>',
                 tasks : ['uglify']
             }
+        },
+        simplemocha: {
+            options: { },
+            all: { src: ['test/**/*.js'] }
         }
     });
 
@@ -61,10 +66,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-simple-mocha');
 
     // Default task.
     grunt.registerTask('default',   ['jshint']);
     grunt.registerTask('docs',      ['shell:cli_to_md']);
-    grunt.registerTask('build',     ['jshint', 'clean', 'docs', 'shell:shrinkwrap']);
+    grunt.registerTask('test',      ['simplemocha']);
+    grunt.registerTask('build',     ['jshint', 'simplemocha', 'clean', 'docs', 'shell:shrinkwrap']);
     grunt.registerTask('dev',       ['jshint', 'watch']);
 };

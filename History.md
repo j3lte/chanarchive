@@ -1,3 +1,11 @@
+[0.4.1](https://github.com/j3lte/chanarchive/releases/tag/v0.4.1) / 2014-12-17
+==================
+
+  * Cleaning up the _this, this and other mess
+  * Moving the src files back to old positions (so no more minified crap)
+  * Restructuring cli.js && refactoring messages in cli (needs more work)
+  * Adding my first tests (needs more work)
+
 [0.4.0](https://github.com/j3lte/chanarchive/releases/tag/v0.4.0) / 2014-12-17
 ==================
 

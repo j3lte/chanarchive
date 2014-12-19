@@ -16,8 +16,6 @@ temp/
 src/
 .jshintrc
 Gruntfile.js
-README.md
-History.md
 
 # folders that can be created during testing
 4chan/
