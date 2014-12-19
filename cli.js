@@ -8,17 +8,17 @@
  */
 
 var optimist = require('optimist'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    updateNotifier = require('update-notifier'),
-    currentFolder = require('path').resolve('./') + '/',
-    pkg = require('./package.json'),
-    argv, urls, proxy,
-    todo = 0,
-    archivers = [],
-    ChanArchiver = require('./lib/chanarchive'),
-    ChanTypes = require('./lib/chantypes'),
-    ChanProxy = require('./lib/proxy/chanproxy');
+var chalk = require('chalk');
+var _ = require('lodash');
+var updateNotifier = require('update-notifier');
+var currentFolder = require('path').resolve('./') + '/';
+var pkg = require('./package.json');
+var argv, urls, proxy;
+var todo = 0;
+var archivers = [];
+var chanArchiver = require('./lib/chanarchive');
+var chanTypes = require('./lib/chantypes');
+var chanProxy = require('./lib/proxy/chanproxy');
 
 var banner = [
 '',
@@ -177,7 +177,7 @@ function runChanArchiver(archiver) {
 }
 
 function addChanArchiver (type, url) {
-    var chanArchiver = new ChanArchiver({
+    var chanArchiver = new chanArchiver({
         chan : type,
         url : url,
         folder : currentFolder
@@ -187,11 +187,11 @@ function addChanArchiver (type, url) {
 }
 
 _.forEach(urls, function (url) {
-    ChanTypes.get(url, function (chan, returnUrl) {
+    chanTypes.get(url, function (chan, returnUrl) {
         if (chan) {
             url = returnUrl || url;
             if (chan.useProxy && proxy === undefined) {
-                proxy = new ChanProxy(chan.useProxy);
+                proxy = new chanProxy(chan.useProxy);
 
                 proxy.port = argv.p;
                 chan.proxyPort = argv.p;
