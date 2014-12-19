@@ -33,8 +33,6 @@ var banner = [
 '                                                                By      : ' + chalk.cyan('@j3lte'),
 ''].join('\n');
 
-console.log(banner);
-
 updateNotifier({
     packageName: pkg.name,
     packageVersion: pkg.version
@@ -92,9 +90,11 @@ urls = argv._;
 todo = urls.length;
 
 if (argv.version) {
-    console.error(require('./package').version);
+    console.log(pkg.name + ', version: ' + pkg.version + '\n');
     process.exit(0);
 }
+
+console.log(banner);
 
 if (urls.length === 0) {
     console.log(optimist.help());
@@ -106,9 +106,13 @@ if (argv.debug) {
 }
 
 function runChanArchiver(archiver) {
+
+    require('http').globalAgent.maxSockets =
+    require('https').globalAgent.maxSockets = Math.max(argv.threads, 10);
+
     archiver.useOriginalFileNames(argv.o);
 
-    //var maxThreadsPerDownloader = Math.max(1, Math.floor(argv.threads / urls));
+    //var maxThreadsPerDownloader = Math.max(1, Math.floor(argv.threads / urls)); // TODO
     archiver.setMaxThreads(argv.threads);
 
     if (argv.watch) {
@@ -119,61 +123,57 @@ function runChanArchiver(archiver) {
         archiver.setExtensions(argv.ext);
     }
 
-    archiver.on('parse', function () {
-        console.log(' [' + chalk.cyan(archiver.name) + '] ' + chalk.green(archiver.queue.length) + ' new files to download');
-    });
+    var archiverName = chalk.cyan(archiver.name);
 
-    archiver.on('end', function () {
-        console.log(' [' + chalk.cyan(archiver.name) + '] %s', chalk.bold.green(' Download finished for: ' + archiver.url));
-        if (proxy) {
-            proxy.stop();
-        }
-        var index = _.findIndex(archivers, function(archive) { return archive.name === archiver.name; });
-        if (index >= 0) {
-            archivers.splice(index, 1);
-        }
-    });
-
-    archiver.on('file:error', function (err, file) {
-        console.log(chalk.red(' [' + chalk.cyan(archiver.name) + '] File error'));
-        console.log(err);
-    });
-
-    if (argv.debug) {
-        archiver.on('file:start', function (file) {
-            console.log(' [' + chalk.cyan(archiver.name) + '] File start : %s, size: %s bytes', chalk.green(file.url), chalk.green(file.size));
-        });
-
-        archiver.on('file:check', function (file) {
-            console.log(' [' + chalk.cyan(archiver.name) + '] File check : %s, md5: %s', chalk.green(file.fileName), chalk.green(file.md5sum));
-        });
-    }
-
-    archiver.on('file:end', function (file) {
-        if (file.existed) {
-            console.log(' [' + chalk.cyan(archiver.name) + '] File : %s skipped, %s already exists', chalk.green(file.url), chalk.green(file.fileName));
-        } else if (file.completed) {
-            console.log(' [' + chalk.cyan(archiver.name) + '] File : %s saved as %s', chalk.green(file.url), chalk.green(file.fileName));
-        }
-        if (argv.debug) {
-            console.log(' [' + chalk.cyan(archiver.name) + '] Queue/Current/Finished: %s/%s/%s', chalk.green(archiver.queue.length), chalk.green(archiver.a), chalk.green(archiver.fin.length));
-        }
-    });
-
-    archiver.on('error', function (err) {
-        console.log(' [' + chalk.cyan(archiver.name) + '] ' + chalk.red(' Error: ' + err.message));
-        todo--;
-        if (todo === 0) {
+    archiver
+        .on('parse', function () {
+            console.log(' [ %s ] %s new files to download', archiverName, chalk.green(archiver.queue.length));
+        })
+        .on('end', function () {
+            console.log(' [ %s ] %s', archiverName, chalk.bold.green(' Download finished for: ' + archiver.url));
             if (proxy) {
-               proxy.stop();
+                proxy.stop();
             }
-        }
-    });
-
-    require('http').globalAgent.maxSockets =
-    require('https').globalAgent.maxSockets = Math.max(argv.threads, 10);
-
-    archiver.download();
+            var index = _.findIndex(archivers, function(archive) { return archive.name === archiver.name; });
+            if (index >= 0) {
+                archivers.splice(index, 1);
+            }
+        })
+        .on('file:error', function (err, file) {
+            console.log(chalk.red(' [ %s ] File error'), archiverName);
+            console.log(err);
+        })
+        .on('file:start', function (file) {
+            if (argv.debug) {
+                console.log(' [ %s ] File start : %s, size: %s bytes', archiverName, chalk.green(file.url), chalk.green(file.size));
+            }
+        })
+        .on('file:end', function (file) {
+            if (file.existed) {
+                console.log(' [ %s ] File : %s skipped, %s already exists', archiverName, chalk.green(file.url), chalk.green(file.fileName));
+            } else if (file.completed) {
+                console.log(' [ %s ] File : %s saved as %s', archiverName, chalk.green(file.url), chalk.green(file.fileName));
+            }
+            if (argv.debug) {
+                console.log(' [ %s ] Queue/Current/Finished: %s/%s/%s', archiverName, chalk.green(archiver.queue.length), chalk.green(archiver.a), chalk.green(archiver.fin.length));
+            }
+        })
+        .on('file:check', function (file) {
+            // File:check is not implemented yet
+            if (argv.debug) {
+                console.log(' [ %s ] File check : %s, md5: %s', archiverName, chalk.green(file.fileName), chalk.green(file.md5sum));
+            }
+        })
+        .on('error', function (err) {
+            console.log(' [ %s ] %s', archiverName, chalk.red(' Error: ' + err.message));
+            todo--;
+            if (todo === 0) {
+                if (proxy) {
+                   proxy.stop();
+                }
+            }
+        })
+        .download();
 }
 
 function addChanArchiver (type, url) {
