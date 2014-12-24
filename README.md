@@ -31,10 +31,10 @@ It will create a folder called based on the imageboard, where it stores the curr
 
 ## Supported Chans:
 
-  * 4CHAN   ::  `http://boards.4chan.org/<BOARD>/thread/<THREAD>`
-  * 7CHAN*  ::  `http://7chan.org/<BOARD>/res/<THREAD>`
-  * 8CHAN   ::  `https://8chan.co/<BOARD>/res/<THREAD>.html`
-  * 420CHAN ::  `http://boards.420chan.org/<BOARD>/res/<THREAD>.php`
+  * [4CHAN](http://www.4chan.org/)   ::  `http://boards.4chan.org/<BOARD>/thread/<THREAD>`
+  * [7CHAN](http://7chan.org/)*  ::  `http://7chan.org/<BOARD>/res/<THREAD>`
+  * [8CHAN](https://8chan.co/)   ::  `https://8chan.co/<BOARD>/res/<THREAD>.html`
+  * [420CHAN](http://420chan.org/) ::  `http://boards.420chan.org/<BOARD>/res/<THREAD>.php`
 
 ## Local proxy
 
