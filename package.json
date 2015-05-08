@@ -1,6 +1,6 @@
 {
   "name": "chanarchive",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Archiver for imageboards in NodeJS",
   "main": "chanarchive.js",
   "bin": {
@@ -44,14 +44,14 @@
   },
   "homepage": "https://github.com/j3lte/chanarchive",
   "dependencies": {
-    "chalk": "~0.5.1",
+    "chalk": "1.0.0",
     "cheerio": "latest",
     "express": "latest",
-    "lodash": "^2.4.1",
+    "lodash": "latest",
     "mkdirp": "^0.5.0",
     "optimist": "^0.6.1",
     "request": "^2.40.0",
-    "update-notifier": "^0.2.2"
+    "update-notifier": "^0.4.0"
   },
   "devDependencies": {
     "chai": "^1.10.0",

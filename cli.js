@@ -7,7 +7,7 @@
  * Licensed under the MIT license.
  */
 
-var optimist = require('optimist'),
+var optimist = require('optimist');
 var chalk = require('chalk');
 var _ = require('lodash');
 var updateNotifier = require('update-notifier');
@@ -48,7 +48,7 @@ argv = optimist
             ' Usage : ' + chalk.bold.cyan('chanarchive [OPTIONS] <URL> [<URL2> <URL3> ... ]'),
             '',
             ' > You can also use a shortcode instead of url: ' + chalk.cyan('chan') + '/' + chalk.cyan('board') + '/' + chalk.cyan('thread'),
-            ' > E.g.: chanarchive 8chan/b/9000',
+            ' > E.g.: ' + chalk.bold.cyan('chanarchive 8chan/b/9000'),
             '',
             ' Current supported imageboard urls are',
             '',
@@ -177,13 +177,13 @@ function runChanArchiver(archiver) {
 }
 
 function addChanArchiver (type, url) {
-    var chanArchiver = new chanArchiver({
+    var chArch = new chanArchiver({
         chan : type,
         url : url,
         folder : currentFolder
     });
-    archivers.push(chanArchiver);
-    runChanArchiver(chanArchiver);
+    archivers.push(chArch);
+    runChanArchiver(chArch);
 }
 
 _.forEach(urls, function (url) {
