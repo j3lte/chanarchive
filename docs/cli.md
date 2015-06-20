@@ -9,7 +9,7 @@
       ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \ V / | ____|
        \____)|_| |_|\_____||_| |_|\_____||_|     \____)|_| |_||_|  \_/  |_____)
                                                                                  
-                                                                Version : 0.4.2
+                                                                Version : 0.4.3
                                                                 By      : @j3lte
 
 
@@ -35,13 +35,14 @@
  If you experience issues, report them here: https://github.com/j3lte/chanarchive/issues
 
 Options:
-  -o, --original-filenames  write original filenames instead of the timestamp filenames (does not always work)
-  -e, --ext                 only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)       
-  -w, --watch               watch for new files.                                                              
-  -i, --interval            watching interval in seconds.                                                       [default: 10]
-  -p, --proxy               when using local proxy (*see above) to parse, set port to listen serve local proxy  [default: 8088]
+  -o, --original-filenames  Write original filenames instead of the timestamp filenames (does not always work)
+  -e, --ext                 Only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)       
+  -w, --watch               Watch for new files.                                                              
+  -i, --interval            Watching interval in seconds.                                                       [default: 10]
+  -p, --proxy               When using local proxy (*see above) to parse, set port to listen serve local proxy  [default: 8088]
   -t, --threads             Num of concurrent downloads (max 10).                                               [default: 10]
   -d, --debug               Verbose debug output                                                              
-  -v, --version             prints current version                                                            
+  -h, --help                Shows this help screen                                                            
+  -u, --update              Checks if there is an update for chanarchive                                      
 
 ```
