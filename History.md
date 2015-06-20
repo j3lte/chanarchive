@@ -1,6 +1,9 @@
-[0.4.2](https://github.com/j3lte/chanarchive/releases/tag/v0.4.2) / 2015-06-20
+[0.4.3](https://github.com/j3lte/chanarchive/releases/tag/v0.4.3) / 2015-06-20
 
   * 8chan.co -> 8ch.net
+  * Removing JSLint, replacing it with ESLint
+  * Fixing issues and violations prompted by ESLint (code style)
+  * Adding more tests
 
 [0.4.1](https://github.com/j3lte/chanarchive/releases/tag/v0.4.1) / 2014-12-19
 ==================

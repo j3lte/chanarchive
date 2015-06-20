@@ -3,7 +3,7 @@
  * chanarchive
  * https://github.com/j3lte/chanarchive
  *
- * Copyright (c) 2014 Jelte Lagendijk
+ * Copyright (c) 2014-2015 Jelte Lagendijk
  * Licensed under the MIT license.
  */
 
@@ -16,9 +16,9 @@ var pkg = require('./package.json');
 var argv, urls, proxy;
 var todo = 0;
 var archivers = [];
-var chanArchiver = require('./lib/chanarchive');
+var ChanArchiver = require('./lib/chanarchive');
 var chanTypes = require('./lib/chantypes');
-var chanProxy = require('./lib/proxy/chanproxy');
+var ChanProxy = require('./lib/proxy/chanproxy');
 
 var banner = [
 '',
@@ -139,7 +139,7 @@ function runChanArchiver(archiver) {
                 archivers.splice(index, 1);
             }
         })
-        .on('file:error', function (err, file) {
+        .on('file:error', function (err) {
             console.log(chalk.red(' [ %s ] File error'), archiverName);
             console.log(err);
         })
@@ -158,18 +158,12 @@ function runChanArchiver(archiver) {
                 console.log(' [ %s ] Queue/Current/Finished: %s/%s/%s', archiverName, chalk.green(archiver.queue.length), chalk.green(archiver.a), chalk.green(archiver.fin.length));
             }
         })
-        .on('file:check', function (file) {
-            // File:check is not implemented yet
-            if (argv.debug) {
-                console.log(' [ %s ] File check : %s, md5: %s', archiverName, chalk.green(file.fileName), chalk.green(file.md5sum));
-            }
-        })
         .on('error', function (err) {
             console.log(' [ %s ] %s', archiverName, chalk.red(' Error: ' + err.message));
             todo--;
             if (todo === 0) {
                 if (proxy) {
-                   proxy.stop();
+                    proxy.stop();
                 }
             }
         })
@@ -177,10 +171,10 @@ function runChanArchiver(archiver) {
 }
 
 function addChanArchiver (type, url) {
-    var chArch = new chanArchiver({
-        chan : type,
-        url : url,
-        folder : currentFolder
+    var chArch = new ChanArchiver({
+        chan: type,
+        url: url,
+        folder: currentFolder
     });
     archivers.push(chArch);
     runChanArchiver(chArch);
@@ -191,7 +185,7 @@ _.forEach(urls, function (url) {
         if (chan) {
             url = returnUrl || url;
             if (chan.useProxy && proxy === undefined) {
-                proxy = new chanProxy(chan.useProxy);
+                proxy = new ChanProxy(chan.useProxy);
 
                 proxy.port = argv.p;
                 chan.proxyPort = argv.p;
@@ -207,7 +201,7 @@ _.forEach(urls, function (url) {
             todo--;
             if (todo === 0) {
                 if (proxy) {
-                   proxy.stop();
+                    proxy.stop();
                 }
                 process.exit();
             }

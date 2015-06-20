@@ -16,43 +16,42 @@ var docsCommand = [
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        jshint: {
+        eslint: {
             all: [
-                "Gruntfile.js",
-                "cli.js",
-                "lib/**/*.js",
+                'Gruntfile.js',
+                'cli.js',
+                'lib/**/*.js'
             ],
-            options: {
-                jshintrc : '.jshintrc',
-                reporter: require('jshint-stylish'),
-                force: false
-            }
+            options: {}
         },
         shell: {
             options: {
                 stderr: false
             },
-            shrinkwrap : {
+            shrinkwrap: {
                 command: 'npm-shrinkwrap'
             },
-            cli_to_md: {
+            clientOutputToMarkdown: {
                 command: docsCommand
             }
         },
         clean: {
             build: [
-                "npm-shrinkwrap.json",
-                "*chan"
+                'npm-shrinkwrap.json',
+                '*chan'
             ]
         },
-        watch : {
-            jshint : {
-                files : '<%= jshint.all %>',
-                tasks: ['jshint']
+        watch: {
+            eslint: {
+                files: '<%= eslint.all %>',
+                tasks: ['eslint']
             },
-            uglify : {
-                files : '<%= jshint.all %>',
-                tasks : ['uglify']
+            simplemocha: {
+                files: [
+                    'test/**/*.js',
+                    '<%= eslint.all %>'
+                ],
+                tasks: ['simplemocha']
             }
         },
         simplemocha: {
@@ -63,15 +62,15 @@ module.exports = function (grunt) {
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-shell');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-eslint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-simple-mocha');
 
     // Default task.
-    grunt.registerTask('default',   ['jshint']);
-    grunt.registerTask('docs',      ['shell:cli_to_md']);
-    grunt.registerTask('test',      ['simplemocha']);
-    grunt.registerTask('build',     ['jshint', 'simplemocha', 'clean', 'docs', 'shell:shrinkwrap']);
-    grunt.registerTask('dev',       ['jshint', 'watch']);
+    grunt.registerTask('default', ['eslint']);
+    grunt.registerTask('docs', ['shell:clientOutputToMarkdown']);
+    grunt.registerTask('test', ['simplemocha']);
+    grunt.registerTask('build', ['eslint', 'simplemocha', 'clean', 'docs', 'shell:shrinkwrap']);
+    grunt.registerTask('dev', ['eslint', 'watch']);
 };
