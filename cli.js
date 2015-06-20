@@ -47,13 +47,14 @@ argv = optimist
             '',
             ' Current supported imageboard urls are',
             '',
-            '  4CHAN   :: http://boards.4chan.org/' + chalk.cyan('<BOARD>') + '/thread/' + chalk.cyan('<THREAD>'),
-            '  7CHAN*  :: http://7chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
-            '  8CHAN   :: https://8ch.net/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
-            '  420CHAN :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php',
+            '    4CHAN       :: http://boards.4chan.org/' + chalk.cyan('<BOARD>') + '/thread/' + chalk.cyan('<THREAD>'),
+            '    7CHAN ' + chalk.yellow('*') + '     :: http://7chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
+            '    8CHAN       :: https://8ch.net/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.html',
+            '    420CHAN     :: http://boards.420chan.org/' + chalk.cyan('<BOARD>') + '/res/' + chalk.cyan('<THREAD>') + '.php',
+            '    KRAUTCHAN ' + chalk.yellow('*') + ' :: http://krautchan.net/' + chalk.cyan('<BOARD>') + '/thread-' + chalk.cyan('<THREAD>') + '.html',
             '',
-            '* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may',
-            '  break when the website decides to change the design.',
+            chalk.yellow(' *These are experimental, because it uses a local proxy to download the page and convert it to JSON. This may'),
+            chalk.yellow('  break when the website decides to change the design.'),
             '',
             ' If you experience issues, report them here: ' + chalk.green('https://github.com/j3lte/chanarchive/issues')
         ].join('\n'))
@@ -108,7 +109,7 @@ function runChanArchiver(archiver) {
 
     archiver
         .on('parse', function () {
-            console.log(' [ %s ] %s', archiverName, chalk.bold.green(archiver.queue.length + ' new files to download, starting'));
+            console.log(' [ %s ] %s', archiverName, chalk.bold.green(archiver.queue.length + ' new files to download' + (archiver.queue.length > 0 ? ', starting' : '')));
         })
         .on('end', function () {
             console.log(' [ %s ] %s', archiverName, chalk.bold.green('Download finished for: ' + archiver.url));

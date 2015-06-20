@@ -23,7 +23,7 @@ Then proceed as follows:
 
     chanarchive [options] <URL> [<URL2> <URL3> ... ]
 
-You can also use shortcodes! Shortcode: imageboard/board/thread, e.g.: 8chan/b/9000
+You can also use shortcodes! Shortcode: imageboard/board/thread, e.g.: `8chan/b/9000`
 
 Call the program with the `-h` or `--help` option to see more options. You can see the current output here in the [docs](https://github.com/j3lte/chanarchive/blob/master/docs/cli.md)
 
@@ -35,6 +35,7 @@ It will create a folder called based on the imageboard, where it stores the curr
   * [7CHAN](http://7chan.org/)*  ::  `http://7chan.org/<BOARD>/res/<THREAD>`
   * [8CHAN](https://8ch.net/)   ::  `https://8ch.net/<BOARD>/res/<THREAD>.html`
   * [420CHAN](http://420chan.org/) ::  `http://boards.420chan.org/<BOARD>/res/<THREAD>.php`
+  * [KRAUTCHAN](http://krautchan.net/)  ::  `http://krautchan.net/<BOARD>/thread-<THREAD>.html`
 
 ## Local proxy
 

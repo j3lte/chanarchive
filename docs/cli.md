@@ -9,7 +9,7 @@
       ( (___ | | | |/ ___ || | | |/ ___ || |    ( (___ | | | || | \ V / | ____|
        \____)|_| |_|\_____||_| |_|\_____||_|     \____)|_| |_||_|  \_/  |_____)
                                                                                  
-                                                                Version : 0.4.3
+                                                                Version : 0.4.4
                                                                 By      : @j3lte
 
 
@@ -24,12 +24,13 @@
 
  Current supported imageboard urls are
 
-  4CHAN   :: http://boards.4chan.org/<BOARD>/thread/<THREAD>
-  7CHAN*  :: http://7chan.org/<BOARD>/res/<THREAD>.html
-  8CHAN   :: https://8ch.net/<BOARD>/res/<THREAD>.html
-  420CHAN :: http://boards.420chan.org/<BOARD>/res/<THREAD>.php
+    4CHAN       :: http://boards.4chan.org/<BOARD>/thread/<THREAD>
+    7CHAN *     :: http://7chan.org/<BOARD>/res/<THREAD>.html
+    8CHAN       :: https://8ch.net/<BOARD>/res/<THREAD>.html
+    420CHAN     :: http://boards.420chan.org/<BOARD>/res/<THREAD>.php
+    KRAUTCHAN * :: http://krautchan.net/<BOARD>/thread-<THREAD>.html
 
-* This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may
+ *These are experimental, because it uses a local proxy to download the page and convert it to JSON. This may
   break when the website decides to change the design.
 
  If you experience issues, report them here: https://github.com/j3lte/chanarchive/issues

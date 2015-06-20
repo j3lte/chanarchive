@@ -192,4 +192,48 @@ describe('ChanArchiver', function(){
 
   });
 
+  describe('creating valid krautchan ChanArchiver (with proxy)', function(){
+
+    var chanArchiver;
+    var chanType;
+    var url;
+
+    beforeEach(function(done){
+      var returnF = function (chan, returnUrl) {
+          chanType = chan;
+          url = returnUrl;
+          chanArchiver = new ChanArchiver({chan: chan, url: url});
+          done();
+      };
+      chanTypes.get('krautchan/b/9000', returnF);
+    });
+
+    it('should set the right properties', function(done){
+      expect(chanArchiver.alias).to.equal(chanType.alias);
+      expect(chanArchiver.picUrl).to.equal(chanType.picUrl);
+      expect(chanArchiver.imagePostHandler).to.equal(chanType.imagePostHandler);
+      expect(chanArchiver.url).to.equal(url);
+      expect(chanArchiver.name).to.equal('krautchan/b/9000');
+      expect(chanArchiver.board).to.equal('b');
+      expect(chanArchiver.thread).to.equal('9000');
+      expect(chanArchiver.saveFolder).to.equal('./krautchan/');
+      done();
+    });
+
+    it('should set the right saveFolder when added to chanArchiver', function(done){
+      chanArchiver = new ChanArchiver({chan: chanType, url: url, folder: './chan/'});
+      expect(chanArchiver.saveFolder).to.equal('./chan/krautchan/');
+      done();
+    });
+
+    it('should set a proxy URL', function(done){
+      expect(chanArchiver.proxyUrl).to.not.be.undefined;
+      expect(chanArchiver.useProxy).to.not.be.undefined;
+      expect(chanArchiver.proxyUrl).to.equal('http://localhost:8088/?url=http://krautchan.net/b/thread-9000.html');
+      expect(chanArchiver.useProxy).to.equal('krautchan');
+      done();
+    });
+
+  });
+
 });

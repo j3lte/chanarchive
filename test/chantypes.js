@@ -60,6 +60,13 @@ describe('ChanTypes', function(){
         chanTypes.get('420chan/b/9000', returnF);
     });
 
+    it('get a valid krautchan url with shortcode', function(){
+        var returnF = function (chan, returnUrl) {
+            expect(returnUrl).to.equal('http://krautchan.net/b/thread-9000.html');
+        };
+        chanTypes.get('krautchan/b/9000', returnF);
+    });
+
   });
 
 });

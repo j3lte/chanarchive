@@ -1,3 +1,8 @@
+[0.4.4](https://github.com/j3lte/chanarchive/releases/tag/v0.4.4) / 2015-06-20
+==================
+
+  * Adding krautchan, another imageboard
+
 [0.4.3](https://github.com/j3lte/chanarchive/releases/tag/v0.4.3) / 2015-06-20
 ==================
 

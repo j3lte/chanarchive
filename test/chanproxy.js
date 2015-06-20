@@ -24,6 +24,20 @@ describe('ChanProxy', function(){
         expect(chanProxy.stop).to.be.a('function');
     });
 
+    it('should set the right parameters on krautchan', function(){
+        var chanProxy = new ChanProxy('krautchan');
+        expect(chanProxy).to.not.equal.null;
+        expect(chanProxy.app).to.not.be.undefined;
+        expect(chanProxy.port).to.equal(8088);
+        expect(chanProxy.server).to.be.undefined;
+    });
+
+    it('should set the right methods on krautchan', function(){
+        var chanProxy = new ChanProxy('krautchan');
+        expect(chanProxy.start).to.be.a('function');
+        expect(chanProxy.stop).to.be.a('function');
+    });
+
   });
 
 });
