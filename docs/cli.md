@@ -26,7 +26,7 @@
 
   4CHAN   :: http://boards.4chan.org/<BOARD>/thread/<THREAD>
   7CHAN*  :: http://7chan.org/<BOARD>/res/<THREAD>.html
-  8CHAN   :: https://8chan.co/<BOARD>/res/<THREAD>.html
+  8CHAN   :: https://8ch.net/<BOARD>/res/<THREAD>.html
   420CHAN :: http://boards.420chan.org/<BOARD>/res/<THREAD>.php
 
 * This is experimental, because it uses a local proxy to download the page and convert it to JSON. This may

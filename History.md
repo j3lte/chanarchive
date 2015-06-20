@@ -1,3 +1,7 @@
+[0.4.2](https://github.com/j3lte/chanarchive/releases/tag/v0.4.2) / 2015-06-20
+
+  * 8chan.co -> 8ch.net
+
 [0.4.1](https://github.com/j3lte/chanarchive/releases/tag/v0.4.1) / 2014-12-19
 ==================
 
