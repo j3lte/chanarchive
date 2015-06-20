@@ -27,7 +27,7 @@ You can also use shortcodes! Shortcode: imageboard/board/thread, e.g.: `8chan/b/
 
 Call the program with the `-h` or `--help` option to see more options. You can see the current output here in the [docs](https://github.com/j3lte/chanarchive/blob/master/docs/cli.md)
 
-It will create a folder called based on the imageboard, where it stores the current thread.
+It will create a folder based on the imageboard, where it stores the current thread. This follows the pattern of the shortcode
 
 ## Supported Chans:
 
@@ -49,7 +49,6 @@ See the `proxy\proxies` directory. It downloads the imageboard page, uses cheeri
   * Download a complete page (as in, all threads on front-page of some board)
   * Choose folder where to store the downloaded files
   * Generate a HTML page/template for offline viewing the thread
-  * Add checksums to the files
 
 ## [License](https://github.com/j3lte/chanarchive/blob/master/LICENSE)
 
