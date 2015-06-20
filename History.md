@@ -4,6 +4,7 @@
   * Removing JSLint, replacing it with ESLint
   * Fixing issues and violations prompted by ESLint (code style)
   * Adding more tests
+  * Fixing the update notifier. Now does manual update check by using -u
 
 [0.4.1](https://github.com/j3lte/chanarchive/releases/tag/v0.4.1) / 2014-12-19
 ==================

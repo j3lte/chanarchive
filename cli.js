@@ -33,11 +33,6 @@ var banner = [
 '                                                                By      : ' + chalk.cyan('@j3lte'),
 ''].join('\n');
 
-updateNotifier({
-    packageName: pkg.name,
-    packageVersion: pkg.version
-}).notify();
-
 argv = optimist
     .usage([
             '',
@@ -64,17 +59,17 @@ argv = optimist
         ].join('\n'))
     .boolean('o')
     .alias('o', 'original-filenames')
-        .describe('o', 'write original filenames instead of the timestamp filenames (does not always work)')
+        .describe('o', 'Write original filenames instead of the timestamp filenames (does not always work)')
     .alias('e', 'ext')
-        .describe('e', 'only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)')
+        .describe('e', 'Only use the following extensions (seperated by slashes; eg: gif/jpeg/webm)')
     .alias('w', 'watch')
-        .describe('w', 'watch for new files.')
+        .describe('w', 'Watch for new files.')
         .boolean('w')
     .alias('i', 'interval')
-        .describe('i', 'watching interval in seconds.')
+        .describe('i', 'Watching interval in seconds.')
         .default('i', 10)
     .alias('p', 'proxy')
-        .describe('p', 'when using local proxy (*see above) to parse, set port to listen serve local proxy')
+        .describe('p', 'When using local proxy (*see above) to parse, set port to listen serve local proxy')
         .default('p', 8088)
     .alias('t', 'threads')
         .describe('t', 'Num of concurrent downloads (max 10).')
@@ -82,28 +77,14 @@ argv = optimist
     .alias('d', 'debug')
         .describe('d', 'Verbose debug output')
         .boolean('d')
-    .alias('v', 'version')
-        .describe('v', 'prints current version')
+    .alias('h', 'help')
+        .describe('h', 'Shows this help screen')
+    .alias('u', 'update')
+        .describe('u', 'Checks if there is an update for chanarchive')
     .argv;
 
 urls = argv._;
 todo = urls.length;
-
-if (argv.version) {
-    console.log(pkg.name + ', version: ' + pkg.version + '\n');
-    process.exit(0);
-}
-
-console.log(banner);
-
-if (urls.length === 0) {
-    console.log(optimist.help());
-    process.exit(0);
-}
-
-if (argv.debug) {
-    console.log('Using current folder to save: ' + currentFolder + '\n');
-}
 
 function runChanArchiver(archiver) {
 
@@ -127,10 +108,10 @@ function runChanArchiver(archiver) {
 
     archiver
         .on('parse', function () {
-            console.log(' [ %s ] %s new files to download', archiverName, chalk.green(archiver.queue.length));
+            console.log(' [ %s ] %s', archiverName, chalk.bold.green(archiver.queue.length + ' new files to download, starting'));
         })
         .on('end', function () {
-            console.log(' [ %s ] %s', archiverName, chalk.bold.green(' Download finished for: ' + archiver.url));
+            console.log(' [ %s ] %s', archiverName, chalk.bold.green('Download finished for: ' + archiver.url));
             if (proxy) {
                 proxy.stop();
             }
@@ -180,34 +161,66 @@ function addChanArchiver (type, url) {
     runChanArchiver(chArch);
 }
 
-_.forEach(urls, function (url) {
-    chanTypes.get(url, function (chan, returnUrl) {
-        if (chan) {
-            url = returnUrl || url;
-            if (chan.useProxy && proxy === undefined) {
-                proxy = new ChanProxy(chan.useProxy);
+function startChanArchive() {
+    _.forEach(urls, function (url) {
+        chanTypes.get(url, function (chan, returnUrl) {
+            if (chan) {
+                url = returnUrl || url;
+                if (chan.useProxy && proxy === undefined) {
+                    proxy = new ChanProxy(chan.useProxy);
 
-                proxy.port = argv.p;
-                chan.proxyPort = argv.p;
+                    proxy.port = argv.p;
+                    chan.proxyPort = argv.p;
 
-                proxy.start(function () {
+                    proxy.start(function () {
+                        addChanArchiver(chan, url);
+                    });
+                } else {
                     addChanArchiver(chan, url);
-                });
-            } else {
-                addChanArchiver(chan, url);
-            }
-        } else {
-            console.log(chalk.red('\n\nUnsupported url : ' + url));
-            todo--;
-            if (todo === 0) {
-                if (proxy) {
-                    proxy.stop();
                 }
-                process.exit();
+            } else {
+                console.log(chalk.red('\n\nUnsupported url : ' + url));
+                todo--;
+                if (todo === 0) {
+                    if (proxy) {
+                        proxy.stop();
+                    }
+                    process.exit();
+                }
             }
+        });
+    });
+}
+
+console.log(banner);
+
+if (argv.update) {
+    console.log(chalk.cyan('\n Checking for an update'));
+    updateNotifier({
+        pkg: pkg,
+        callback: function(err, update) {
+            if (err) {
+                console.log(chalk.red('\n\n Error checking the update : '), err);
+            } else {
+                if (update.latest !== update.current) {
+                    console.log(chalk.green(' Update available! Run ') + chalk.bold.cyan('npm update -g chanarchive') + chalk.green(' to install version ') + chalk.bold.cyan(update.latest) + '\n');
+                } else {
+                    console.log(chalk.green(' You are running the latest version :-)\n'));
+                }
+            }
+            process.exit(0);
         }
     });
-});
+} else if (argv.help || urls.length === 0) {
+    console.log(optimist.help());
+    process.exit(0);
+} else {
+    startChanArchive();
+}
+
+if (argv.debug) {
+    console.log('Using current folder to save: ' + currentFolder + '\n');
+}
 
 process.on('SIGINT', function() {
     if (proxy) {
