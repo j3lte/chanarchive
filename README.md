@@ -1,10 +1,10 @@
 chanarchive
 ===========
 
-[![NPM](https://nodei.co/npm/chanarchive.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/chanarchive/)
+[![NPM](https://nodei.co/npm/chanarchive.svg?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/chanarchive/)
 
 [![Build Status](https://travis-ci.org/j3lte/chanarchive.svg?branch=master)](https://travis-ci.org/j3lte/chanarchive)
-[![DAVID](https://david-dm.org/j3lte/chanarchive.png)](https://david-dm.org/j3lte/chanarchive)
+[![DAVID](https://david-dm.org/j3lte/chanarchive.svg)](https://david-dm.org/j3lte/chanarchive)
 [![npm version](https://badge.fury.io/js/chanarchive.svg)](http://badge.fury.io/js/chanarchive)
 [![Development Dependency Status](https://david-dm.org/j3lte/chanarchive/dev-status.svg?theme=shields.io)](https://david-dm.org/j3lte/chanarchive#info=devDependencies)
 [![Code Climate](https://codeclimate.com/github/j3lte/chanarchive/badges/gpa.svg)](https://codeclimate.com/github/j3lte/chanarchive)
